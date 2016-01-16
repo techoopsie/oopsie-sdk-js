@@ -3,7 +3,15 @@
 export default class MyObject {
 
   constructor(domainObject) {
-    console.log(domainObject)
+    this.domainObject = domainObject;
+  };
+
+  log() {
+    console.log(this.domainObject);
+  };
+
+  greet(asd) {
+    alert(asd);
   };
 
 };
