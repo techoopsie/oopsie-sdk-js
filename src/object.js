@@ -4,6 +4,8 @@ export default class MyObject {
 
   constructor(domainObject) {
     this.domainObject = domainObject;
+
+    this.log = this.log.bind(log)
   };
 
   log() {

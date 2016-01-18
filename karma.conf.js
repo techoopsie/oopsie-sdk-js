@@ -1,6 +1,6 @@
 // Karma configuration
 var webpackConfig = require('./webpack.config.js');
-webpackConfig.entry = {};
+//webpackConfig.entry = {};
 webpackConfig.watch = true;
 
 module.exports = function(config) {
@@ -31,10 +31,6 @@ module.exports = function(config) {
 	    'test/tests.webpack.js': ['webpack']
 	},
 
-
-    webpackMiddleware: {
-        noInfo: true
-    },
 
 	// List plugins explicitly, since autoloading karma-webpack
 	// won't work here
