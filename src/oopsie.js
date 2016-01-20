@@ -1,22 +1,14 @@
-function Oopsie(domainObject) {
 
-    var oopsie = {};
-    oopsie.item = {};
-    oopsie.domainObject = domainObject;
-    oopsie.rest = rest("http://localhost", domainObject);
+var Oopsie = (function (oopsie) {
+    'use strict';
 
-    oopsie.log = function() {
-        console.log(this.domainObject);
-    };
-
-    oopsie.getAll = function() {
-        return oopsie.rest.getAll();
-    };
+	oopsie.getAll = function () {
+        oopsie._restHelper.getAll();
+	};
 
     oopsie.save = function() {
-        return oopsie.rest.save(oopsie.item);
+
     };
 
-    return oopsie;
-
-};
+	return oopsie;
+}(Oopsie || {}));

@@ -3,9 +3,10 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
-    Server = require('karma').Server;
-    fs = require('fs'),
-    package = JSON.parse(fs.readFileSync('./package.json'));
+    Server = require('karma').Server,
+    fs = require('fs');
+
+var packageJSON = JSON.parse(fs.readFileSync('./package.json'));
 
 gulp.task('build', function(){
     return gulp.src(['./src/**/*.js'])

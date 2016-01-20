@@ -1,18 +1,15 @@
 // Karma configuration
-//var webpackConfig = require('./webpack.config.js');
-//webpackConfig.entry = {};
-//webpackConfig.watch = true;
-
 module.exports = function(config) {
+  'use strict';
   config.set({
 
 
-    frameworks: ['jasmine', 'browserify'],
+    frameworks: ['jasmine', 'sinon', 'browserify'],
     basePath: '',
-	//webpack: webpackConfig,
-	reporters: ['spec'],
-	port: 9876,
-	colors: true,
+  	//webpack: webpackConfig,
+  	reporters: ['spec'],
+  	port: 9876,
+  	colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
@@ -20,25 +17,31 @@ module.exports = function(config) {
     singleRun: false,
 
 
+      // list of files / patterns to load in the browser
+  	files: [
+      //'src/**/*.js',
+      'src/RestHelper.js',
+      'src/Oopsie.js',
+      'src/OopsieMeta.js',
+      'src/OopsieService.js',
+      'src/OopsieObject.js',
+      'test/**/*.spec.js'
+  	],
+
+
     preprocessors: {
-        'tests/*.spec.js': [ 'browserify' ] //Mention path as per your test js folder
+      'test/**/*.spec.js': [ 'browserify' ]
     },
 
 
-    // list of files / patterns to load in the browser
-	files: [
-        'src/**/*.js',
-        'test/**/*.spec.js'
-	],
-
-
-	// List plugins explicitly, since autoloading karma-webpack
-	// won't work here
-	plugins: [
-		'karma-spec-reporter',
-		'karma-chrome-launcher',
-        'karma-jasmine',
-        'karma-browserify'
-	]
+  	// List plugins explicitly, since autoloading karma-webpack
+  	// won't work here
+  	plugins: [
+  		'karma-spec-reporter',
+  		'karma-chrome-launcher',
+      'karma-jasmine',
+      'karma-browserify',
+      'karma-sinon'
+  	]
   });
-}
+};
