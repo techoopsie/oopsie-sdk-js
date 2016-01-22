@@ -7,12 +7,12 @@ module.exports = function(config) {
     frameworks: ['jasmine', 'sinon', 'browserify'],
     basePath: '',
   	//webpack: webpackConfig,
-  	reporters: ['spec'],
+  	reporters: ['spec', 'coverage'],
   	port: 9876,
   	colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'IEEdge', 'Firefox'],
     captureTimeout: 60000,
     singleRun: false,
 
@@ -26,12 +26,21 @@ module.exports = function(config) {
       'src/OopsieMeta.js',
       'src/OopsieService.js',
       'src/OopsieObject.js',
+      'src/Promise.js',
       'test/**/*.spec.js'
   	],
 
 
     preprocessors: {
-      'test/**/*.spec.js': [ 'browserify' ]
+      'test/**/*.spec.js': [ 'browserify' ],
+      'src/**/*.js': ['coverage']
+    },
+
+    customLaunchers: {
+      IEEdge: {
+        base: 'IE',
+        'x-ua-compatible': 'IE=EmulateEdge'
+      }
     },
 
 
@@ -40,9 +49,12 @@ module.exports = function(config) {
   	plugins: [
   		'karma-spec-reporter',
   		'karma-chrome-launcher',
-      'karma-jasmine',
-      'karma-browserify',
-      'karma-sinon'
+        'karma-ie-launcher',
+        'karma-firefox-launcher',
+        'karma-jasmine',
+        'karma-browserify',
+        'karma-sinon',
+        'karma-coverage'
   	]
   });
 };
