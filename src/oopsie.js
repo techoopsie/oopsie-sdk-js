@@ -1,14 +1,14 @@
 
-var Oopsie = (function (oopsie) {
+(function (oopsie) {
     'use strict';
 
 	oopsie.getAll = function () {
-        oopsie._restHelper.getAll();
+        oopsie.__service.getAll();
 	};
 
     oopsie.save = function() {
 
     };
 
-	return oopsie;
-}(Oopsie || {}));
+
+}(window.oopsie));

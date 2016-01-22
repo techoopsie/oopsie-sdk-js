@@ -1,13 +1,16 @@
-var Oopsie = (function (oopsie) {
+(function (oopsie) {
     'use strict';
 
-	oopsie.getAll = function () {
-        return oopsie._restHelper.get('http://localhost');
-	};
+    oopsie.__service = {
 
-    oopsie.save = function(oopsieObject) {
-        return oopsie._restHelper.post('http://localhost', oopsieObject);
+    	getAll: function () {
+            return oopsie.__RestHelper.get('http://localhost');
+    	},
+
+        save: function(oopsieObject) {
+            return oopsie.__RestHelper.post('http://localhost', oopsieObject);
+        }
+
     };
 
-	return oopsie;
-}(Oopsie || {}));
+}(window.oopsie));

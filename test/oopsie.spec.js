@@ -15,15 +15,23 @@ describe('Oopsie should ', function() {
     });
 
     it('be defined', function () {
-        expect(Oopsie).toBeDefined();
+        expect(oopsie).toBeDefined();
+    });
+
+    it('not add objects to window.', function() {
+        oopsie.notAddedToWindow= {
+            'test': {}
+        };
+        oopsie.notAddedToWindow = false;
+        expect(window.notAddedToWindow).toBeUndefined();
     });
 
     it('have getAll() defined', function() {
-        expect(Oopsie.getAll).toBeDefined();
+        expect(oopsie.getAll).toBeDefined();
     });
 
     it('be able to call getAll()', function() {
-        Oopsie.getAll();
+        oopsie.getAll();
     });
 
 
