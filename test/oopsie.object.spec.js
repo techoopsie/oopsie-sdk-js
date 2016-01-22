@@ -67,6 +67,18 @@ describe('OopsieObject should ', function() {
 
     });
 
+    it('work for user as this.', function() {
+
+        var person = new OopsieObject('person');
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+
+        var myMother = new OopsieObject('person');
+        myMother.setFirstName('Anna');
+        myMother.setLastName('Andersson');
+
+    });
+
     describe('be able to create getters and setters that should ', function() {
 
         var oopsieObject;

@@ -20,7 +20,7 @@
 
         function setupGettersAndSetters() {
 
-            for (var key in self.meta) {
+            for (var key in self.meta.item) {
                 /*jslint evil: true */
                 var name = key;
                 var nameOfItemWithUppercase = capitalizeFirstLetter(name);
@@ -37,7 +37,7 @@
         }
 
         self.__addItem = function(key, value) {
-            if (!oopsie.__meta.contains(self.domainObject, key)) {
+            if (!self.meta.contains(key)) {
                 throw new Error('DomainObject: ' + self.domainObject + ' doesn\'t contain the key: ' + key);
             }
             items[key] = value;

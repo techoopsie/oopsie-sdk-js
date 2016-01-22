@@ -11,7 +11,20 @@
         },
 
         getDomainObject: function(domainObject) {
-            return this.item[domainObject];
+            return this.getItem(domainObject);
+        },
+
+        getItem: function(domainObject) {
+
+            var self = {};
+            self.item = this.item[domainObject];
+
+            self.contains = function(key) {
+                return this.item[key] !== undefined;
+            };
+
+            return self;
+
         },
 
         contains: function(domainObject, key) {

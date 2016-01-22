@@ -4,7 +4,10 @@
     oopsie.__RestHelper = {
 
         get: function (url) {
-            return new Promise(function(resolve, reject) {
+
+            url = this.appendFirstSlash(url);
+
+            return new oopsie.Promise(function(resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -14,13 +17,16 @@
                         reject();
                     }
                 };
-                xhr.open('GET', url, true);
+                xhr.open('GET', oopsie.config.url + url, true);
                 xhr.send(null);
             });
     	},
 
         save: function(url, item) {
-            return new Promise(function(resolve, reject) {
+
+            url = this.appendFirstSlash(url);
+
+            return new oopsie.Promise(function(resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
@@ -30,9 +36,15 @@
                         reject();
                     }
                 };
-                xhr.open('POST', url, true);
+                xhr.open('POST', oopsie.config.url + url, true);
                 xhr.send('item=' + JSON.stringify(item));
             });
+        },
+
+        appendFirstSlash: function(url) {
+            if (url.slice(0, '/') !== '/') {
+                url = '/' + url;
+            }
         }
 
     };

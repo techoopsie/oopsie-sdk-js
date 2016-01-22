@@ -1,17 +1,20 @@
+var sinon = require('sinon');
 
 describe('Oopsie should ', function() {
     'use strict';
-    var xhr, requests;
+    var server, url;
 
     beforeEach(function() {
-        xhr = sinon.sandbox.useFakeXMLHttpRequest();
-        requests = [];
-        xhr.onCreate = function (req) { requests.push(req); };
+        server = sinon.fakeServer.create();
+
+        console.log(sinon.fakeServer);
+        url = 'http://localhost:8080';
+        oopsie.init(url);
     });
 
     afterEach(function () {
         // Like before we must clean up when tampering with globals.
-        xhr.restore();
+        server.restore();
     });
 
     it('be defined', function () {
@@ -30,8 +33,54 @@ describe('Oopsie should ', function() {
         expect(oopsie.getAll).toBeDefined();
     });
 
-    it('be able to call getAll()', function() {
-        oopsie.getAll();
+    it('have save() defined', function() {
+        expect(oopsie.save).toBeDefined();
+    });
+
+    it('have get() defined', function() {
+        expect(oopsie.get).toBeDefined();
+    });
+
+    it('not be able to create a new object', function() {
+        expect(function() { new oopsie(); }).toThrow();
+    });
+
+    describe('be able to call the backend to ', function() {
+
+        var oopsieObject, domainObject;
+
+        beforeEach(function() {
+
+            domainObject = 'person';
+            oopsie.__meta.item[domainObject] = {
+                'lastName': 'string',
+                'firstName': 'string'
+            };
+
+            oopsieObject = new OopsieObject('person');
+
+        });
+
+        describe('getAll() ', function() {
+
+            it('domainObjects of specific type', function() {
+                var fakeData = {'test': 'test'};
+                console.log(server);
+                server.respondWidth(
+                    'GET',
+                    oopsie.config.url + domainObject,
+                    [200, { 'Content-Type': 'application/json'}, JSON.stringify(fakeData)]
+                );
+                oopsie.getAll(domainObject);
+
+            });
+
+        });
+
+
+
+
+
     });
 
 

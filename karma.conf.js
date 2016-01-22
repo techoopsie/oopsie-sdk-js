@@ -4,7 +4,7 @@ module.exports = function(config) {
   config.set({
 
 
-    frameworks: ['jasmine', 'sinon', 'browserify'],
+    frameworks: ['jasmine', /*'sinon',*/ 'browserify'],
     basePath: '',
   	//webpack: webpackConfig,
   	reporters: ['spec', 'coverage'],
@@ -12,7 +12,7 @@ module.exports = function(config) {
   	colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome', 'IEEdge', 'Firefox'],
+    browsers: ['Chrome', 'IEEdge' ], //'Firefox'],
     captureTimeout: 60000,
     singleRun: false,
 
@@ -50,10 +50,10 @@ module.exports = function(config) {
   		'karma-spec-reporter',
   		'karma-chrome-launcher',
         'karma-ie-launcher',
-        'karma-firefox-launcher',
+        //'karma-firefox-launcher',
         'karma-jasmine',
         'karma-browserify',
-        'karma-sinon',
+        //'karma-sinon',
         'karma-coverage'
   	]
   });
