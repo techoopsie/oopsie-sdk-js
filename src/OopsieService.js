@@ -3,19 +3,18 @@
 
     oopsie.__service = {
 
-    	getAll: function (domainObject) {
-            return oopsie.__RestHelper.get('http://localhost:8080/' + domainObject);
+    	getAll: function (resource) {
+            return OopsieUtil.__RestHelper.get('http://localhost/' + resource);
     	},
 
         save: function(oopsieObject) {
-            return oopsie.__RestHelper.post('http://localhost', oopsieObject);
+            return OopsieUtil.__RestHelper.post('http://localhost', oopsieObject);
         },
 
-        get: function(domainObject, id) {
-            return oopsie.__RestHelper.get('http//localhost' + id);
+        get: function(resource, id) {
+            return OopsieUtil.__RestHelper.get('http://localhost/' + resource + '/' + id);
         }
-
 
     };
 
-}(window.oopsie));
+}(window.OopsieUtil));

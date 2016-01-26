@@ -1,67 +1,51 @@
-(function () {
+(function (oopsieResource) {
     'use strict';
 
-    window.OopsieObject = function (domainObject) {
+    var oopsieResource = window.OopsieResource = function OopsieResource(resourceName, resource) {
 
-        if ( !(this instanceof OopsieObject) ) {
-            return new OopsieObject(domainObject);
+        if ( !(this instanceof OopsieResource) ) {
+            return new OopsieResource(resourceName, resource);
         }
 
         var self = this;
-        self.domainObject = domainObject;
+        self.resource = resource[resourceName];
+        self.resourceName = resourceName;
+        self.items = {};
 
-        var items = {};
-
-        function init() {
-            verifyDomainObject();
-            self.meta = oopsie.__meta.getDomainObject(self.domainObject);
-            setupGettersAndSetters();
-        }
-
-        function setupGettersAndSetters() {
-
-            for (var key in self.meta.item) {
-                /*jslint evil: true */
-                var name = key;
-                var nameOfItemWithUppercase = capitalizeFirstLetter(name);
-                var setter = 'set' + nameOfItemWithUppercase;
-                var getter = 'get' + nameOfItemWithUppercase;
-                self[setter] = new Function('value', 'this.__addItem("' + key + '", value);');
-                self[getter] = new Function('return this.__getItem("' + key + '");');
-            }
-
-        }
-
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
-        self.__addItem = function(key, value) {
-            if (!self.meta.contains(key)) {
-                throw new Error('DomainObject: ' + self.domainObject + ' doesn\'t contain the key: ' + key);
-            }
-            items[key] = value;
-        };
-
-        self.__getItem = function(key) {
-            return items[key];
-        };
-
-        self.getItem = function() {
-            return items;
-        };
-
-        function verifyDomainObject() {
-            if (self.domainObject === undefined) {
-                throw new Error('OopsieObject needs an DomainObject in the constructor.');
-            }
-
-            oopsie.__meta.verifyDomainExists(self.domainObject);
-        }
-
-        init();
+        self.setupGettersAndSetters();
 
         return self;
     };
 
-}());
+    oopsieResource.prototype.setupGettersAndSetters = function() {
+
+        for (var key in self.resource) {
+            /*jslint evil: true */
+            var name = key;
+            var nameOfItemWithUppercase = capitalizeFirstLetter(name);
+            var setter = 'set' + nameOfItemWithUppercase;
+            var getter = 'get' + nameOfItemWithUppercase;
+            self[setter] = new Function('value', 'this.__addItem("' + key + '", value);');
+            self[getter] = new Function('return this.__getItem("' + key + '");');
+        }
+
+    };
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
+    oopsieResource.prototype.__addItem = function(key, value) {
+        this.items[key] = value;
+    };
+
+    oopsieResource.prototype.__getItem = function(key) {
+        return this.items[key];
+    };
+
+    oopsieResource.prototype.getItem = function() {
+        return this.items;
+    };
+
+
+}(window.OopsieResource));
