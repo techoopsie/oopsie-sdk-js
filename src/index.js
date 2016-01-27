@@ -1,7 +1,7 @@
 
-window.oopsie = window.oopsie || {};
-window.oopsie.config = window.oopsie.config || {};
-window.oopsie.version = '<%= pkg.version %>';
-window.oopsie.__RestHelper = {};
-window.oopsie.__meta = window.oopsie.__meta || {};
-window.oopsieObject = window.OopsieObject || {};
+window.Oopsie = window.Oopsie || {};
+window.OopsieUtil = window.OopsieUtil || {};
+window.OopsieUtil.config = window.OopsieUtil.config || {};
+window.OopsieUtil.version = '<%= pkg.version %>';
+window.OopsieUtil.__RestHelper = {};
+window.OopsieResource = window.OopsieResource || {};

@@ -1,43 +1,35 @@
 (function (oopsie) {
     'use strict';
-
     oopsie.__RestHelper = {
 
         get: function (url) {
+            var self = this;
 
-            url = this.appendFirstSlash(url);
+            return new OopsieUtil.Promise(function(resolve, reject) {
 
-            return new oopsie.Promise(function(resolve, reject) {
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        alert(xhr.responseText);
-                        resolve(xhr.responseText);
-                    } else if (xhr.readyState === XMLHttpRequest.DONE) {
-                        reject();
-                    }
-                };
-                xhr.open('GET', oopsie.config.url + url, true);
-                xhr.send(null);
+                self.sendXMLHttpRequest(
+                    url,
+                    'GET',
+                    null,
+                    resolve,
+                    reject
+                );
+
             });
     	},
 
         save: function(url, item) {
 
-            url = this.appendFirstSlash(url);
+            return new OopsieUtil.Promise(function(resolve, reject) {
 
-            return new oopsie.Promise(function(resolve, reject) {
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                        alert(xhr.responseText);
-                        resolve(xhr.responseText);
-                    } else if (xhr.readyState === XMLHttpRequest.DONE) {
-                        reject();
-                    }
-                };
-                xhr.open('POST', oopsie.config.url + url, true);
-                xhr.send('item=' + JSON.stringify(item));
+                self.sendXMLHttpRequest(
+                    url,
+                    'POST',
+                    'item=' + JSON.stringify(item),
+                    resolve,
+                    reject
+                );
+
             });
         },
 
@@ -45,10 +37,28 @@
             if (url.slice(0, '/') !== '/') {
                 url = '/' + url;
             }
+            return url;
+        },
+
+        sendXMLHttpRequest: function(url, method, item, resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                } else if (xhr.readyState === XMLHttpRequest.DONE) {
+                    reject(new Error('Failed to retrieve data'));
+                }
+
+            };
+
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(item);
         }
 
     };
 
 
 
-}(window.oopsie));
+}(window.OopsieUtil));

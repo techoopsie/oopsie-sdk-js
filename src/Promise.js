@@ -197,4 +197,4 @@
 		root.Promise = Promise;
 	}
 
-})(window.oopsie);
+})(window.OopsieUtil);

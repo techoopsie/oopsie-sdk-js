@@ -1,28 +1,74 @@
 
-(function (oopsie) {
+(function () {
     'use strict';
 
-    oopsie.init = function(url) {
-        oopsie.config.url = url;
+    var oopsie = window.Oopsie = function Oopsie(appId, callback) {
+
+        if (appId === undefined) {
+            throw new Error('Oopsie needs an App Id to work.');
+        }
+
+        if ( !(this instanceof Oopsie) ) {
+            return new Oopsie(appId, callback);
+        }
+
+        this.appId = appId;
+        this.meta = {};
+        this.resources = {};
+        var self = this;
+
+        OopsieUtil.__RestHelper.get('http://localhost').then(function(meta) {
+
+            self.meta = meta;
+            self.resources = meta.properties;
+            callback();
+
+        }, function(err) {
+
+            console.log(err);
+            callback(err);
+
+        });
+
+        return this;
+
     };
 
-	oopsie.getAll = function (domainObject) {
+    oopsie.prototype.getResource = function(resourceName) {
+        if (resourceName === undefined) {
+            throw new Error('OopsieResource needs an resource in the constructor.');
+        }
 
-        return oopsie.__service.getAll(domainObject);
+        if (this.resources[resourceName] === undefined) {
+            var availableResourceNames = '';
+            for (var resource in this.resources) {
+                availableResourceNames += resource + ', ';
+            }
+            availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
+            throw new Error('Resource ' + resourceName + ' doesnt exist in your application. '
+                 + '\n Available resources are: ' + availableResourceNames);
+        }
+
+        return new OopsieResource(resourceName, this.resources[resourceName]);
+    };
+
+	oopsie.prototype.getAll = function (resourceName) {
+
+        return OopsieUtil.__service.getAll(resourceName);
 
 	};
 
-    oopsie.save = function(oopsieObject) {
+    oopsie.prototype.save = function(oopsieObject) {
 
-        return oopsie.__service.save(oopsieObject);
-
-    };
-
-    oopsie.get = function(domainObject, id) {
-
-        return oopsie.__service.get(domainObject, id);
+        return OopsieUtil.__service.save(oopsieObject);
 
     };
 
+    oopsie.prototype.get = function(resourceName, id) {
 
-}(window.oopsie));
+        return OopsieUtil.__service.get(resourceName, id);
+
+    };
+
+
+}());

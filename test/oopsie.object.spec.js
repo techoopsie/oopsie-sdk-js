@@ -1,61 +1,68 @@
-describe('OopsieObject should ', function() {
+var sinon = require('sinon');
+var mock = require('./server.mock');
+
+describe('OopsieResource should ', function() {
     'use strict';
 
-    var firstName, lastName;
+    var firstName, lastName, oopsie, server, resourceName;
 
-    beforeEach(function() {
+    beforeEach(function(done) {
 
         firstName = 'TestUser';
         lastName = 'Lastname';
+        resourceName = 'person';
+
+        server = mock.setupMetaMock('http://localhost', 'GET', mock.fakeData);
+
+        var appId = '123456-abcdef';
+
+        oopsie = new Oopsie(appId, function(data) {
+            done();
+        });
+    });
+
+    afterEach(function() {
+
+        mock.restoreAllServers();
 
     });
 
     it('be defined', function () {
 
-        expect(OopsieObject).toBeDefined();
+        expect(OopsieResource).toBeDefined();
 
     });
 
-    it('throw an exception if no DomainObject is passed to constructor.', function() {
+    it('throw an exception if no Resource is passed to constructor.', function() {
 
-        expect(function() { new OopsieObject(); }).toThrow(
-            new Error('OopsieObject needs an DomainObject in the constructor.')
+        expect(function() { oopsie.getResource(); }).toThrow(
+            new Error('OopsieResource needs an resource in the constructor.')
         );
 
     });
 
     it('not be added to window when not using new.', function() {
 
-        oopsie.__meta.item = {
-            'test': {}
-        };
-
-        var oopsieObject = OopsieObject('test');
-        oopsieObject.notAddedToWindow = false;
+        var oopsieResource = oopsie.getResource(resourceName);
+        oopsieResource.notAddedToWindow = false;
         expect(window.notAddedToWindow).toBeUndefined();
 
     });
 
-    it ('throw an exception if DomainObject doesn\'t exist', function() {
+    it ('throw an exception if resource doesn\'t exist', function() {
 
-        var domainObject = 'NotFound';
-        expect(function() { new OopsieObject(domainObject); }).toThrow(
-            new Error('DomainObject ' + domainObject + ' doesnt exist in your application')
+        var resource = 'NotFound';
+        expect(function() { oopsie.getResource(resource); }).toThrow(
+            new Error('Resource ' + resource + ' doesnt exist in your application. '
+                 + '\n Available resources are: ' + resourceName)
         );
 
     });
 
     it('be able to create multiple without interfering with each other', function() {
 
-        oopsie.__meta.item = {
-            'person': {
-                'lastName': 'string',
-                'firstName': 'string'
-            }
-        };
-
-        var oopsieObject = new OopsieObject('person');
-        var secondOopsieObject = new OopsieObject('person');
+        var oopsieObject = oopsie.getResource(resourceName);
+        var secondOopsieObject = oopsie.getResource(resourceName);
 
         oopsieObject.setFirstName(firstName);
         expect(oopsieObject.getFirstName()).toBe(firstName);
@@ -69,11 +76,11 @@ describe('OopsieObject should ', function() {
 
     it('work for user as this.', function() {
 
-        var person = new OopsieObject('person');
+        var person = oopsie.getResource('person');
         person.setFirstName(firstName);
         person.setLastName(lastName);
 
-        var myMother = new OopsieObject('person');
+        var myMother = oopsie.getResource('person');
         myMother.setFirstName('Anna');
         myMother.setLastName('Andersson');
 
@@ -85,14 +92,7 @@ describe('OopsieObject should ', function() {
 
         beforeEach(function() {
 
-            oopsie.__meta.item = {
-                'person': {
-                    'lastName': 'string',
-                    'firstName': 'string'
-                }
-            };
-
-            oopsieObject = new OopsieObject('person');
+            oopsieObject = oopsie.getResource('person');
 
         });
 
@@ -111,12 +111,6 @@ describe('OopsieObject should ', function() {
             oopsieObject.setLastName(lastName);
             expect(oopsieObject.getItem().firstName).toBe(firstName);
             expect(oopsieObject.getItem().lastName).toBe(lastName);
-
-        });
-
-        it('not be able to change the item without using setters', function() {
-
-            expect(oopsieObject.items).toBeUndefined();
 
         });
 
