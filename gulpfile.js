@@ -4,9 +4,10 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
     Server = require('karma').Server,
-    fs = require('fs');
+    header = require('gulp-header');
 
-var packageJSON = JSON.parse(fs.readFileSync('./package.json'));
+var pkg = require('./package.json');
+var config = require('./config/build.conf');
 
 gulp.task('build', function(){
     return gulp.src(['./src/**/*.js'])
@@ -15,6 +16,7 @@ gulp.task('build', function(){
         .pipe(gulp.dest('dist'))
         .pipe(rename('oopsie.min.js'))
         .pipe(uglify())
+        .pipe(header(config.banner, { pkg : pkg } ))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'));
 });

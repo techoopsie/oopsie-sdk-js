@@ -3,14 +3,14 @@ var mock = require('./server.mock');
 
 describe('Oopsie should ', function() {
     'use strict';
-    var server, url, oopsie, resourceName;
+    var server, url, oopsie, resourceName, appId;
 
     beforeEach(function(done) {
 
         resourceName = 'person';
         server = mock.setupMetaMock('http://localhost', 'GET', mock.fakeData);
 
-        var appId = '123456-abcdef';
+        appId = '123456-abcdef';
         oopsie = new Oopsie(appId, function(err) {
             if (err) {
                 console.log(err.message);
@@ -27,6 +27,14 @@ describe('Oopsie should ', function() {
 
     it('be defined', function () {
         expect(Oopsie).toBeDefined();
+    });
+
+    it('not be added to window when not using new.', function() {
+
+        var oopsie = Oopsie(appId);
+        oopsie.notAddedToWindow = false;
+        expect(window.notAddedToWindow).toBeUndefined();
+
     });
 
     it('not add objects to window.', function() {
@@ -50,7 +58,9 @@ describe('Oopsie should ', function() {
     });
 
     it('not be able to create a new object', function() {
-        expect(function() { new Oopsie(); }).toThrow();
+        expect(function() { new Oopsie(); }).toThrow(
+            new Error('Oopsie needs an App Id to work.')
+        );
     });
 
     describe('be able to call the backend to ', function() {

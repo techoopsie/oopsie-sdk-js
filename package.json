@@ -1,7 +1,8 @@
 {
-  "name": "sdk",
+  "name": "OopsieResourceJS",
   "version": "1.0.0",
-  "description": "General sdk",
+  "description": "Javascript SDK for Oopsie",
+  "homepage": "http://www.oopsie.io/",
   "main": "lib/index.js",
   "scripts": {
     "test": "Run something else"
@@ -11,6 +12,7 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.7.1",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemap": "^1.0.1",
     "gulp-sourcemaps": "^1.6.0",
@@ -26,7 +28,6 @@
     "karma-firefox-launcher": "^0.1.7",
     "karma-ie-launcher": "^0.2.0",
     "karma-jasmine": "^0.3.6",
-
     "karma-spec-reporter": "0.0.23",
     "sinon": "sinonjs/sinon"
   }

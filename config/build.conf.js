@@ -1,28 +1,16 @@
-var pkg = require('../package.json');
-var fs = require('fs');
-
-module.exports = {
+var config = {
 
     dist: 'dist',
 
 
-    banner:
-        '/*!\n' +
-        ' * Copyright 2015 Drifty Co.\n' +
-        ' * http://drifty.com/\n' +
-        ' *\n' +
-        ' * Ionic, v<%= pkg.version %>\n' +
-        ' * A powerful HTML5 mobile app framework.\n' +
-        ' * http://ionicframework.com/\n' +
-        ' *\n' +
-        ' * By @maxlynch, @benjsperry, @adamdbradley <3\n' +
-        ' *\n' +
-        ' * Licensed under the MIT license. Please see LICENSE for more information.\n'+
-        ' *\n' +
-        ' */\n\n',
+    banner: ['/**',
+        ' * <%= pkg.name %> - <%= pkg.description %>',
+        ' * @version v<%= pkg.version %>',
+        ' * @link <%= pkg.homepage %>',
+        ' * @license <%= pkg.license %>',
+        ' */',
+        ''].join('\n'),
 
-    closureStart: '(function() {\n',
-    closureEnd: '\n})();',
 
     oopsieFiles: [
         'src/index.js',
@@ -36,3 +24,5 @@ module.exports = {
 
 
 };
+
+module.exports = config;
