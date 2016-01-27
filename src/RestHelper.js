@@ -6,7 +6,7 @@
             var self = this;
 
             return new OopsieUtil.Promise(function(resolve, reject) {
-                console.log("in get");
+
                 self.sendXMLHttpRequest(
                     url,
                     'GET',
@@ -43,15 +43,15 @@
         sendXMLHttpRequest: function(url, method, item, resolve, reject) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
-                console.log(xhr.readyState);
-                console.log(xhr.status);
+
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                     resolve(JSON.parse(xhr.responseText));
                 } else if (xhr.readyState === XMLHttpRequest.DONE) {
                     reject(new Error('Failed to retrieve data'));
                 }
+
             };
-            console.log("getting " + url);
+
             xhr.open(method, url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(item);

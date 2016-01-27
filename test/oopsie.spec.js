@@ -1,27 +1,27 @@
 var sinon = require('sinon');
+var mock = require('./server.mock');
 
 describe('Oopsie should ', function() {
     'use strict';
-    var server, url, oopsie, fakeData, resourceName;
+    var server, url, oopsie, resourceName;
 
     beforeEach(function(done) {
 
         resourceName = 'person';
-        server = setupMetaMock('http://localhost', 'GET', fakeData);
+        server = mock.setupMetaMock('http://localhost', 'GET', mock.fakeData);
 
         var appId = '123456-abcdef';
         oopsie = new Oopsie(appId, function(err) {
             if (err) {
                 console.log(err.message);
             }
-            console.log("Ok oopsie");
             done();
         });
     });
 
     afterEach(function () {
         // Like before we must clean up when tampering with globals.
-        server.restore();
+        mock.restoreAllServers();
 
     });
 
@@ -67,19 +67,10 @@ describe('Oopsie should ', function() {
 
             it('domainObjects of specific type', function(done) {
 
-                /*server.respondWith(
-                    'GET',
-                    'http://localhost/' + resourceName,
-                    [
-                        200,
-                        { 'Content-Type': 'application/json'},
-                        JSON.stringify(fakeData)
-                    ]
-                );
-                console.log(resourceName);
-                server.respondImmediately = true;*/
+                server = mock.setupMetaMock('http://localhost/' + resourceName, 'GET', mock.fakeData);
+
                 oopsie.getAll(resourceName).then(function(data) {
-                    expect(data).toEqual(fakeData);
+                    expect(data).toEqual(mock.fakeData);
                     done();
                 }, function(error) {
                     fail();
@@ -90,15 +81,7 @@ describe('Oopsie should ', function() {
 
             it('and throw an Exception if it is not an 200', function(done) {
 
-                /*server.respondWith(
-                    'GET',
-                    'http://localhost/' + resourceName,
-                    [
-                        500,
-                        { 'Content-Type': 'application/json'},
-                        JSON.stringify(fakeData)
-                    ]
-                );*/
+                server = mock.setupMetaMock('http://localhost/' + resourceName, 'GET', mock.fakeData, 500);
 
                 oopsie.getAll(resourceName).then(function(data) {
                     fail('We should not have been resolved.');

@@ -36,16 +36,17 @@
 
     oopsie.prototype.getResource = function(resourceName) {
         if (resourceName === undefined) {
-            throw new Error('OopsieResource needs an Resource in the constructor.');
+            throw new Error('OopsieResource needs an resource in the constructor.');
         }
 
         if (this.resources[resourceName] === undefined) {
             var availableResourceNames = '';
-            for (resource in this.resources[resourceName]) {
-                console.log(resource);
-                availableResourceNames += this.resources[resourceName][resource] + ', ';
+            for (var resource in this.resources) {
+                availableResourceNames += resource + ', ';
             }
-            throw new Error('Resource ' + resourceName + ' doesnt exist in your application.Available resources are: ' + availableResourceNames);
+            availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
+            throw new Error('Resource ' + resourceName + ' doesnt exist in your application. '
+                 + '\n Available resources are: ' + availableResourceNames);
         }
 
         return new OopsieResource(resourceName, this.resources[resourceName]);

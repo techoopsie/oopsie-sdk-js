@@ -1,41 +1,30 @@
 var sinon = require('sinon');
+var mock = require('./server.mock');
 
 describe('OopsieResource should ', function() {
     'use strict';
 
-    var firstName, lastName, oopsie, server;
+    var firstName, lastName, oopsie, server, resourceName;
 
     beforeEach(function(done) {
 
         firstName = 'TestUser';
         lastName = 'Lastname';
+        resourceName = 'person';
 
-        server = sinon.fakeServer.create();
+        server = mock.setupMetaMock('http://localhost', 'GET', mock.fakeData);
 
-        server.respondWith(
-            'GET',
-            'http://localhost',
-            [
-                200,
-                { 'Content-Type': 'application/json'},
-                JSON.stringify(fakeData)
-            ]
-        );
-        server.respondImmediately = true;
-
-        console.log(window.Oopsie);
         var appId = '123456-abcdef';
 
-                console.log("Innan skapat oopsie");
-                console.log(Oopsie);
         oopsie = new Oopsie(appId, function(data) {
-            console.log("Ok oopsie");
-
             done();
         });
+    });
 
-        console.log("EFter skapat oopsie");
-        console.log(oopsie);
+    afterEach(function() {
+
+        mock.restoreAllServers();
+
     });
 
     it('be defined', function () {
@@ -46,7 +35,7 @@ describe('OopsieResource should ', function() {
 
     it('throw an exception if no Resource is passed to constructor.', function() {
 
-        expect(function() { new OopsieResource(); }).toThrow(
+        expect(function() { oopsie.getResource(); }).toThrow(
             new Error('OopsieResource needs an resource in the constructor.')
         );
 
@@ -54,7 +43,7 @@ describe('OopsieResource should ', function() {
 
     it('not be added to window when not using new.', function() {
 
-        var oopsieResource = oopsie.getResource('person');
+        var oopsieResource = oopsie.getResource(resourceName);
         oopsieResource.notAddedToWindow = false;
         expect(window.notAddedToWindow).toBeUndefined();
 
@@ -64,15 +53,16 @@ describe('OopsieResource should ', function() {
 
         var resource = 'NotFound';
         expect(function() { oopsie.getResource(resource); }).toThrow(
-            new Error('Resource ' + resource + ' doesnt exist in your application')
+            new Error('Resource ' + resource + ' doesnt exist in your application. '
+                 + '\n Available resources are: ' + resourceName)
         );
 
     });
 
     it('be able to create multiple without interfering with each other', function() {
 
-        var oopsieObject = oopsie.getResource('person');
-        var secondOopsieObject = oopsie.getResource('person');
+        var oopsieObject = oopsie.getResource(resourceName);
+        var secondOopsieObject = oopsie.getResource(resourceName);
 
         oopsieObject.setFirstName(firstName);
         expect(oopsieObject.getFirstName()).toBe(firstName);
@@ -121,12 +111,6 @@ describe('OopsieResource should ', function() {
             oopsieObject.setLastName(lastName);
             expect(oopsieObject.getItem().firstName).toBe(firstName);
             expect(oopsieObject.getItem().lastName).toBe(lastName);
-
-        });
-
-        it('not be able to change the item without using setters', function() {
-
-            expect(oopsieObject.items).toBeUndefined();
 
         });
 

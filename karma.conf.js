@@ -4,9 +4,8 @@ module.exports = function(config) {
   config.set({
 
 
-    frameworks: ['jasmine', /*'sinon',*/ 'browserify'],
+    frameworks: ['jasmine', 'browserify'],
     basePath: '',
-  	//webpack: webpackConfig,
   	reporters: ['spec', 'coverage'],
   	port: 9876,
   	colors: true,
@@ -26,8 +25,8 @@ module.exports = function(config) {
       'src/OopsieService.js',
       'src/OopsieObject.js',
       'src/Promise.js',
-      'test/mock.js',
-      'test/**/*.spec.js'
+      'test/**/*.mock.js',
+      'test/**/*.js'
   	],
 
 
@@ -51,10 +50,8 @@ module.exports = function(config) {
   		'karma-spec-reporter',
   		'karma-chrome-launcher',
         'karma-ie-launcher',
-        //'karma-firefox-launcher',
         'karma-jasmine',
         'karma-browserify',
-        //'karma-sinon',
         'karma-coverage'
   	]
   });
