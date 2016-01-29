@@ -45,9 +45,17 @@
             xhr.onreadystatechange = function() {
 
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+
                     resolve(JSON.parse(xhr.responseText));
+
                 } else if (xhr.readyState === XMLHttpRequest.DONE) {
-                    reject(new Error('Failed to retrieve data'));
+
+                    var err = {
+                        message: JSON.parse(xhr.responseText),
+                        status: xhr.status
+                    };
+                    reject(err);
+
                 }
 
             };

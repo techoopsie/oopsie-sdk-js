@@ -52,9 +52,14 @@
         return new OopsieResource(resourceName, this.resources[resourceName]);
     };
 
-	oopsie.prototype.getAll = function (resourceName) {
+    /*
+     *  Requests to get/save OopsieResources
+     *
+     */
 
-        return OopsieUtil.__service.getAll(resourceName);
+	oopsie.prototype.getAll = function (resourceName, callback) {
+
+        OopsieUtil.__service.getAll(resourceName, callback);
 
 	};
 
@@ -64,9 +69,9 @@
 
     };
 
-    oopsie.prototype.get = function(resourceName, id) {
+    oopsie.prototype.get = function(resourceName, id, callback) {
 
-        return OopsieUtil.__service.get(resourceName, id);
+        OopsieUtil.__service.get(resourceName, id, callback);
 
     };
 

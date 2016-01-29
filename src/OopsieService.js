@@ -3,16 +3,76 @@
 
     oopsie.__service = {
 
-    	getAll: function (resource) {
-            return OopsieUtil.__RestHelper.get('http://localhost/' + resource);
+    	getAll: function (resourceName, callback) {
+
+            OopsieUtil.__RestHelper.get('http://localhost/' + resourceName).then(function(resources) {
+                var oopsieResources = [];
+
+                try {
+
+                    for (var resource in resources) {
+                        oopsieResources.push(new OopsieResource(resourceName, resources[resource]));
+                    }
+
+                } catch(err) {
+
+                    callback(err, null);
+
+                }
+
+                callback(null, oopsieResources);
+
+            }, function(err) {
+
+                callback(err, null);
+
+            });
+
     	},
 
-        save: function(oopsieObject) {
-            return OopsieUtil.__RestHelper.post('http://localhost', oopsieObject);
+        save: function(oopsieResource, callback) {
+
+            OopsieUtil.__RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource).then(function(resource) {
+
+                try {
+
+                    var oopsieResource = new OopsieResource(oopsieResource.resourceName, resource);
+                    callback(null, oopsieResource);
+
+                } catch(err) {
+
+                    callback(err, null);
+
+                }
+
+            }, function(err) {
+
+                callback(err, null);
+
+            });
+
         },
 
-        get: function(resource, id) {
-            return OopsieUtil.__RestHelper.get('http://localhost/' + resource + '/' + id);
+        get: function(resourceName, id, callback) {
+
+            OopsieUtil.__RestHelper.get('http://localhost/' + resourceName + '/' + id).then(function(resource) {
+
+                try {
+
+                    var oopsieResource = new OopsieResource(resourceName, resource);
+                    callback(null, oopsieResource);
+
+                } catch(err) {
+
+                    callback(err, null);
+
+                }
+
+            }, function(err) {
+
+                callback(err, null);
+
+            });
         }
 
     };

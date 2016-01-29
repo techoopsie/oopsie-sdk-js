@@ -1,14 +1,38 @@
 var sinon = require('sinon');
 
 var mock = {
-    fakeData: {
-        'properties':
+
+
+    NOT_FOUND: 404,
+
+    person: {
+        'lastName': 'Andersson',
+        'firstName': 'Andreas'
+    },
+
+    persons: [
+        {
+            'lastName': 'Andersson',
+            'firstName': 'Andreas'
+        }, {
+            'lastName': 'Gullstrand',
+            'firstName': 'Nicolas'
+        }, {
+            'lastName': 'Andersson',
+            'firstName': 'Bengt'
+        }
+    ],
+
+    getMetaData: function() {
+        return { 'properties':
             {
-                'person': {
-                    'lastName': 'string',
-                    'firstName': 'string'
-                }
+                'person': this.person
             }
+        };
+    },
+
+    getErrorMessage: function() {
+        return  'Error';
     },
 
     servers: [],
@@ -22,7 +46,7 @@ var mock = {
 
     },
 
-    setupMetaMock: function(url, method, data, responseCode) {
+    serverMock: function(url, method, data, responseCode) {
 
         if (responseCode === undefined) {
             responseCode = 200;
@@ -43,6 +67,8 @@ var mock = {
         return server;
 
     }
+
+
 
 };
 

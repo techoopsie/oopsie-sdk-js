@@ -13,12 +13,13 @@
         self._items = {};
 
         self.setupGettersAndSetters();
+        self.setValues();
 
         return self;
     };
 
     oopsieResource.prototype.setupGettersAndSetters = function() {
-        
+
         for (var key in this.resource) {
             /*jslint evil: true */
             var name = key;
@@ -27,6 +28,21 @@
             var getter = 'get' + nameOfItemWithUppercase;
             this[setter] = new Function('value', 'this.__addItem("' + key + '", value);');
             this[getter] = new Function('return this.__getItem("' + key + '");');
+        }
+
+    };
+
+    oopsieResource.prototype.setValues = function() {
+
+        for (var key in this.resource) {
+
+            var resource = this.resource[key];
+
+            if (resource === '' || resource === undefined) {
+                continue;
+            }
+
+            this.__addItem(key, resource);
         }
 
     };

@@ -12,7 +12,7 @@ describe('OopsieResource should ', function() {
         lastName = 'Lastname';
         resourceName = 'person';
 
-        server = mock.setupMetaMock('http://localhost', 'GET', mock.fakeData);
+        server = mock.serverMock('http://localhost', 'GET', mock.getMetaData());
 
         var appId = '123456-abcdef';
 
@@ -66,7 +66,7 @@ describe('OopsieResource should ', function() {
 
         oopsieObject.setFirstName(firstName);
         expect(oopsieObject.getFirstName()).toBe(firstName);
-        expect(secondOopsieObject.getFirstName()).toBeUndefined();
+        expect(secondOopsieObject.getFirstName()).not.toEqual(firstName);
 
         secondOopsieObject.test = 'test';
         expect(secondOopsieObject.test).toBe('test');
