@@ -25,7 +25,6 @@
 
         }, function(err) {
 
-            console.log(err);
             callback(err);
 
         });
@@ -71,9 +70,28 @@
 
     oopsie.prototype.get = function(resourceName, id, callback) {
 
+        if (!resourceName) {
+            throw new Error('ResourceName can\'t be null or undefined');
+        }
+
+        if (!id) {
+            throw new Error('Id can\'t be null or undefined');
+        }
+
+        if (!hasResource(resourceName, this.resources)) {
+            throw new Error('Resource: ' + resourceName + ' doesn\'t exist.');
+        }
+
         OopsieUtil.__service.get(resourceName, id, callback);
 
     };
+
+
+    /* Helpers */
+
+    function hasResource(resourceName, resources) {
+        return resources[resourceName] !== undefined;
+    }
 
 
 }());

@@ -64,6 +64,20 @@ describe('Oopsie should ', function() {
         );
     });
 
+    it('return an error if not able to retrieve meta data', function() {
+
+        var notWorkingAppId = 'fakeId';
+        var message = 'Resource doesn\'t exist';
+        mock.serverMock('http://localhost', 'GET', message, mock.NOT_FOUND);
+
+        new Oopsie(notWorkingAppId, function(err) {
+            expect(err.status).toEqual(mock.NOT_FOUND);
+            expect(err.message).toEqual(message);
+        });
+
+
+    });
+
     describe('be able to call the backend to ', function() {
 
         var oopsieResource;
@@ -90,13 +104,14 @@ describe('Oopsie should ', function() {
                         fail('We should have gotten ' + mock.persons.length + ' OopsieResources');
                     }
 
-                    for (var oopsieResource in oopsieResources) {
+                    for (var index in oopsieResources) {
 
-                        expect(oopsieResources[oopsieResource].getFirstName()).toEqual(mock.persons[oopsieResource].firstName);
-                        expect(oopsieResources[oopsieResource].getLastName()).toEqual(mock.persons[oopsieResource].lastName);
+                        var oopsieResource =  oopsieResources[index];
+                        expect(oopsieResource.resource).toEqual(mock.persons[index]);
+                        expect(oopsieResource.getFirstName()).toEqual(mock.persons[index].firstName);
+                        expect(oopsieResource.getLastName()).toEqual(mock.persons[index].lastName);
 
                     }
-
 
                     done();
 
@@ -127,10 +142,17 @@ describe('Oopsie should ', function() {
 
         describe('get() ', function() {
 
+            var id, resourceName;
+
+            beforeEach(function() {
+
+                id = 'abcd-1234';
+                resourceName = 'person';
+
+            });
+
             it('should return specific OopsieResource', function(done) {
 
-                var id = 'abcd-1234';
-                var resourceName = 'person';
                 mock.serverMock('http://localhost/' + resourceName + '/' + id, 'GET', mock.person);
                 oopsie.get(resourceName, id, function(err, oopsieResource) {
 
@@ -139,15 +161,57 @@ describe('Oopsie should ', function() {
                     }
 
                     expect(oopsieResource.resource).toEqual(mock.person);
+                    expect(oopsieResource.getFirstName()).toEqual(mock.person.firstName);
+                    expect(oopsieResource.getLastName()).toEqual(mock.person.lastName);
                     done();
+
                 });
+
+            });
+
+            it('should throw an exception if resourceName doesn\'t exist', function() {
+
+                resourceName = 'NonExisting';
+                expect(function() { oopsie.get(resourceName, id, null); }).toThrow(
+                    new Error('Resource: ' + resourceName + ' doesn\'t exist.')
+                );
+
+            });
+
+            it('should throw an exception if resourceName is null', function() {
+
+                expect(function() { oopsie.get(null, id, null); }).toThrow(
+                    new Error('ResourceName can\'t be null or undefined')
+                );
+
+            });
+
+            it('should throw an exception if resourceName is undefined', function() {
+
+                expect(function() { oopsie.get(undefined, id, null); }).toThrow(
+                    new Error('ResourceName can\'t be null or undefined')
+                );
+
+            });
+
+            it('should throw an exception if id is null', function() {
+
+                expect(function() { oopsie.get(resourceName, null, null); }).toThrow(
+                    new Error('Id can\'t be null or undefined')
+                );
+
+            });
+
+            it('should throw an exception if id is undefined', function() {
+
+                expect(function() { oopsie.get(resourceName, undefined, null); }).toThrow(
+                    new Error('Id can\'t be null or undefined')
+                );
 
             });
 
             it('should return error if OopsieResource not found', function(done) {
 
-                var id = 'abcd-1234';
-                var resourceName = 'person';
                 mock.serverMock('http://localhost/' + resourceName + '/' + id, 'GET', mock.getErrorMessage(), mock.NOT_FOUND);
                 oopsie.get(resourceName, id, function(err, oopsieResource) {
 
@@ -159,6 +223,7 @@ describe('Oopsie should ', function() {
                     expect(err.status).toBe(mock.NOT_FOUND);
                     expect(err.message).toBe(mock.getErrorMessage());
                     done();
+
                 });
 
             });

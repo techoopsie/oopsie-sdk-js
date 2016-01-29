@@ -33,6 +33,14 @@ describe('OopsieResource should ', function() {
 
     });
 
+    it('not be added to window if not new is used', function() {
+
+        var oopsieResource = OopsieResource(resourceName, mock.person);
+        oopsieResource.notAddedToWindow = 'test';
+        expect(window.notAddedToWindow).toBeUndefined();
+
+    });
+
     it('throw an exception if no Resource is passed to constructor.', function() {
 
         expect(function() { oopsie.getResource(); }).toThrow(
