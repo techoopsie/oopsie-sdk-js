@@ -62,9 +62,13 @@
 
 	};
 
-    oopsie.prototype.save = function(oopsieObject) {
+    oopsie.prototype.save = function(oopsieResource, callback) {
 
-        return OopsieUtil.__service.save(oopsieObject);
+        if (!oopsieResource || ! (oopsieResource instanceof OopsieResource) ) {
+            throw new Error('Save neeeds an OopsieResource as first argument.');
+        }
+
+        OopsieUtil.__service.save(oopsieResource, callback);
 
     };
 

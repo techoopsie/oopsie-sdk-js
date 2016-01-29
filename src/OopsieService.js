@@ -31,12 +31,12 @@
     	},
 
         save: function(oopsieResource, callback) {
-
+            
             OopsieUtil.__RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource).then(function(resource) {
 
                 try {
 
-                    var oopsieResource = new OopsieResource(oopsieResource.resourceName, resource);
+                    oopsieResource = new OopsieResource(oopsieResource.resourceName, resource);
                     callback(null, oopsieResource);
 
                 } catch(err) {

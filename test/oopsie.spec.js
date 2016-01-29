@@ -140,7 +140,7 @@ describe('Oopsie should ', function() {
 
         });
 
-        describe('get() ', function() {
+        describe('get() should ', function() {
 
             var id, resourceName;
 
@@ -151,7 +151,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should return specific OopsieResource', function(done) {
+            it('return specific OopsieResource', function(done) {
 
                 mock.serverMock('http://localhost/' + resourceName + '/' + id, 'GET', mock.person);
                 oopsie.get(resourceName, id, function(err, oopsieResource) {
@@ -169,7 +169,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should throw an exception if resourceName doesn\'t exist', function() {
+            it('throw an exception if resourceName doesn\'t exist', function() {
 
                 resourceName = 'NonExisting';
                 expect(function() { oopsie.get(resourceName, id, null); }).toThrow(
@@ -178,7 +178,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should throw an exception if resourceName is null', function() {
+            it('throw an exception if resourceName is null', function() {
 
                 expect(function() { oopsie.get(null, id, null); }).toThrow(
                     new Error('ResourceName can\'t be null or undefined')
@@ -186,7 +186,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should throw an exception if resourceName is undefined', function() {
+            it('throw an exception if resourceName is undefined', function() {
 
                 expect(function() { oopsie.get(undefined, id, null); }).toThrow(
                     new Error('ResourceName can\'t be null or undefined')
@@ -194,7 +194,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should throw an exception if id is null', function() {
+            it('throw an exception if id is null', function() {
 
                 expect(function() { oopsie.get(resourceName, null, null); }).toThrow(
                     new Error('Id can\'t be null or undefined')
@@ -202,7 +202,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should throw an exception if id is undefined', function() {
+            it('throw an exception if id is undefined', function() {
 
                 expect(function() { oopsie.get(resourceName, undefined, null); }).toThrow(
                     new Error('Id can\'t be null or undefined')
@@ -210,7 +210,7 @@ describe('Oopsie should ', function() {
 
             });
 
-            it('should return error if OopsieResource not found', function(done) {
+            it('return error if OopsieResource not found', function(done) {
 
                 mock.serverMock('http://localhost/' + resourceName + '/' + id, 'GET', mock.getErrorMessage(), mock.NOT_FOUND);
                 oopsie.get(resourceName, id, function(err, oopsieResource) {
@@ -225,6 +225,71 @@ describe('Oopsie should ', function() {
                     done();
 
                 });
+
+            });
+
+        });
+
+        describe('save() should ', function() {
+
+            var id, resourceName;
+
+            beforeEach(function() {
+
+                id = 'abcd-1234';
+                resourceName = 'person';
+
+            });
+
+            it('store the object and return a new OopsieResource', function(done) {
+
+
+                var oopsieResource = oopsie.getResource(resourceName);
+                var changedLastName = 'testLastName';
+                oopsieResource.setLastName(changedLastName);
+
+                mock.serverMock('http://localhost/' + resourceName, 'POST', oopsieResource.getItem());
+
+                oopsie.save(oopsieResource, function(err, or) {
+
+                    if (err) {
+                        console.log(err);
+                        fail('We should have saved the oopsieResource and retrieved it.');
+                    }
+
+                    expect(or.getFirstName()).toEqual(oopsieResource.getFirstName());
+                    expect(or.getLastName()).toEqual(changedLastName);
+
+                    done();
+
+                });
+
+            });
+
+            it('throw an exception if not an OopsieResource object is passed it', function() {
+
+                oopsieResource = {};
+                expect(function() { oopsie.save(oopsieResource, null); }).toThrow(
+                    new Error('Save neeeds an OopsieResource as first argument.')
+                );
+
+            });
+
+            it('throw an exception if passing undefined as OopsieResource', function() {
+
+                oopsieResource = undefined;
+                expect(function() { oopsie.save(oopsieResource, null); }).toThrow(
+                    new Error('Save neeeds an OopsieResource as first argument.')
+                );
+
+            });
+
+            it('throw an exception if passing null as OopsieResource', function() {
+
+                oopsieResource = null;
+                expect(function() { oopsie.save(oopsieResource, null); }).toThrow(
+                    new Error('Save neeeds an OopsieResource as first argument.')
+                );
 
             });
 

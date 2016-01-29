@@ -3,6 +3,7 @@
     oopsie.__RestHelper = {
 
         get: function (url) {
+
             var self = this;
 
             return new OopsieUtil.Promise(function(resolve, reject) {
@@ -18,7 +19,9 @@
             });
     	},
 
-        save: function(url, item) {
+        post: function(url, item) {
+
+            var self = this;
 
             return new OopsieUtil.Promise(function(resolve, reject) {
 

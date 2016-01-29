@@ -14,7 +14,7 @@
 
         self.setupGettersAndSetters();
         self.setValues();
-
+        
         return self;
     };
 
