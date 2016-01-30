@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     Server = require('karma').Server,
     header = require('gulp-header');
-
+    
+var sequence = require('run-sequence');
 var pkg = require('./package.json');
 var config = require('./config/build.conf');
 
@@ -34,7 +35,13 @@ gulp.task('test', function (done) {
   }, done).start();
 });
 
-gulp.task('ci', ['build', 'ci-test']);
+gulp.task('ci', function(done) {
+
+    runSequence('build', 'ci-test', function() {
+        done();
+    });
+
+});
 
 gulp.task('ci-test', function (done) {
   new Server({
