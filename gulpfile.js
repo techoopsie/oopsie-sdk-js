@@ -4,12 +4,20 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
     Server = require('karma').Server,
-    header = require('gulp-header');
+    header = require('gulp-header'),
+    clean = require('gulp-clean');
 
 var runSequence = require('run-sequence');
 var pkg = require('./package.json');
 var config = require('./config/build.conf');
 var jshint = require('gulp-jshint');
+
+gulp.task('clean', function() {
+
+    return gulp.src('dist')
+        .pipe(clean());
+
+});
 
 gulp.task('build', function(){
     return gulp.src(config.oopsieFiles)
@@ -46,15 +54,17 @@ gulp.task('test', function (done) {
 
 gulp.task('ci', function(done) {
 
-    runSequence('lint', 'build', 'ci-test', function() {
+    runSequence('lint', 'clean', 'build', 'ci-test', function() {
         done();
     });
 
 });
 
 gulp.task('ci-test', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.build.conf.js',
-    singleRun: true
-  }, done).start();
+
+    new Server({
+        configFile: __dirname + '/karma.build.conf.js',
+        singleRun: true
+    }, done).start();
+
 });

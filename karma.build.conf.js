@@ -10,10 +10,10 @@ module.exports = function(config) {
   	port: 9876,
   	colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
+    autoWatch: false,
     browsers: ['PhantomJS'],
     captureTimeout: 60000,
-    singleRun: false,
+    singleRun: true,
 
 
       // list of files / patterns to load in the browser
@@ -24,26 +24,21 @@ module.exports = function(config) {
 
 
     preprocessors: {
-      'test/**/*.js': [ 'browserify' ],
+      'test/**/*.js': [ 'browserify'],
       'dist/**/*.js': ['coverage']
     },
 
 
     junitReporter: {
-      outputFile: 'test-results.xml',
-      outputDir: 'test-results'
+      outputFile: 'test-results/test-results.xml',
+      suite: ''
     },
 
 
   	// List plugins explicitly, since autoloading karma-webpack
   	// won't work here
   	plugins: [
-  		'karma-spec-reporter',
-        'karma-jasmine',
-        'karma-browserify',
-        'karma-coverage',
-        'karma-junit-reporter',
-        'karma-phantomjs-launcher'
+  		'karma-*'
   	]
   });
 };
