@@ -13,9 +13,8 @@ var config = require('./config/build.conf');
 gulp.task('build', function(){
     return gulp.src(config.oopsieFiles)
         .pipe(sourcemaps.init())
-        .pipe(concat('concat.js'))
+        .pipe(concat('oopsie.min.js'))
         .pipe(gulp.dest('dist'))
-        .pipe(rename('oopsie.min.js'))
         .pipe(uglify())
         .pipe(header(config.banner, { pkg : pkg } ))
         .pipe(sourcemaps.write('./'))
