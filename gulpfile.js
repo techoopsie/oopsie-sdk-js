@@ -10,7 +10,7 @@ var pkg = require('./package.json');
 var config = require('./config/build.conf');
 
 gulp.task('build', function(){
-    return gulp.src(['./src/**/*.js'])
+    return gulp.src(config.oopsieFiles)
         .pipe(sourcemaps.init())
         .pipe(concat('concat.js'))
         .pipe(gulp.dest('dist'))
@@ -30,6 +30,15 @@ gulp.task('tdd', function (done) {
 gulp.task('test', function (done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+});
+
+gulp.task('ci', ['build', 'ci-test']);
+
+gulp.task('ci-test', function (done) {
+  new Server({
+    configFile: __dirname + '/karma.build.conf.js',
     singleRun: true
   }, done).start();
 });

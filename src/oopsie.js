@@ -44,8 +44,8 @@
                 availableResourceNames += resource + ', ';
             }
             availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
-            throw new Error('Resource ' + resourceName + ' doesnt exist in your application. '
-                 + '\n Available resources are: ' + availableResourceNames);
+            throw new Error('Resource ' + resourceName + ' doesnt exist in your application. ' +
+                 '\n Available resources are: ' + availableResourceNames);
         }
 
         return new OopsieResource(resourceName, this.resources[resourceName]);
