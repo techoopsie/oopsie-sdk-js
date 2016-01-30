@@ -5,8 +5,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     Server = require('karma').Server,
     header = require('gulp-header');
-    
-var sequence = require('run-sequence');
+
+var runSequence = require('run-sequence');
 var pkg = require('./package.json');
 var config = require('./config/build.conf');
 
