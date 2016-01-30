@@ -9,6 +9,7 @@ var gulp = require('gulp'),
 var runSequence = require('run-sequence');
 var pkg = require('./package.json');
 var config = require('./config/build.conf');
+var jshint = require('gulp-jshint');
 
 gulp.task('build', function(){
     return gulp.src(config.oopsieFiles)
@@ -19,6 +20,15 @@ gulp.task('build', function(){
         .pipe(header(config.banner, { pkg : pkg } ))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'));
+});
+
+gulp.task('lint', function() {
+
+    return gulp.src('src/**/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))
+        .pipe(jshint.reporter('fail'));
+
 });
 
 gulp.task('tdd', function (done) {
@@ -36,7 +46,7 @@ gulp.task('test', function (done) {
 
 gulp.task('ci', function(done) {
 
-    runSequence('build', 'ci-test', function() {
+    runSequence('lint', 'build', 'ci-test', function() {
         done();
     });
 

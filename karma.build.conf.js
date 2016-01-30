@@ -19,7 +19,6 @@ module.exports = function(config) {
       // list of files / patterns to load in the browser
   	files: [
       'dist/oopsie.min.js',
-      'test/**/*.mock.js',
       'test/**/*.js'
   	],
 

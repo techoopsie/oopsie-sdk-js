@@ -31,7 +31,7 @@
     	},
 
         save: function(oopsieResource, callback) {
-            
+
             OopsieUtil.__RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource).then(function(resource) {
 
                 try {
