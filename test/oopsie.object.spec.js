@@ -1,6 +1,8 @@
 var sinon = require('sinon');
 var mock = require('./server.mock');
 
+//import Oopsie from './../src/index.js';
+
 describe('OopsieResource should ', function() {
     'use strict';
 
@@ -29,13 +31,13 @@ describe('OopsieResource should ', function() {
 
     it('be defined', function () {
 
-        expect(OopsieResource).toBeDefined();
+        expect(oopsie.getResource(resourceName)).toBeDefined();
 
     });
 
     it('not be added to window if not new is used', function() {
 
-        var oopsieResource = OopsieResource(resourceName, mock.person);
+        var oopsieResource = oopsie.getResource(resourceName);
         oopsieResource.notAddedToWindow = 'test';
         expect(window.notAddedToWindow).toBeUndefined();
 

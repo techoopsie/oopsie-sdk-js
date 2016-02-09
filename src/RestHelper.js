@@ -1,12 +1,13 @@
-(function (oopsie) {
-    'use strict';
-    oopsie.__RestHelper = {
+import { Promise } from 'es6-promise';
 
-        get: function (url) {
+const RestHelper = {
+
+
+        get: function(url) {
 
             var self = this;
 
-            return new OopsieUtil.Promise(function(resolve, reject) {
+            return new Promise(function(resolve, reject) {
 
                 self.sendXMLHttpRequest(
                     url,
@@ -23,7 +24,7 @@
 
             var self = this;
 
-            return new OopsieUtil.Promise(function(resolve, reject) {
+            return new Promise(function(resolve, reject) {
 
                 self.sendXMLHttpRequest(
                     url,
@@ -68,8 +69,6 @@
             xhr.send(item);
         }
 
-    };
+}
 
-
-
-}(window.OopsieUtil));
+export default RestHelper;

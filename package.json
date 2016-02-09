@@ -5,11 +5,24 @@
   "homepage": "http://www.oopsie.io/",
   "main": "lib/index.js",
   "scripts": {
-    "test": "Run something else"
+    "dev": "cross-env WEBPACK_ENV=dev webpack --progress --colors --watch",
+    "build": "cross-env WEBPACK_ENV=build webpack",
+    "test": "node ./node_modules/karma/bin/karma start karma.webpack.conf.js --single-run",
+    "tdd": "node ./node_modules/karma/bin/karma start karma.webpack.conf.js"
   },
   "author": "Andreas Törnström Andersson",
   "license": "ISC",
   "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-core": "^6.4.5",
+    "babel-eslint": "^4.1.8",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-preset-es2015": "^6.3.13",
+    "cross-env": "^1.0.7",
+    "es6-promise": "^3.0.2",
+    "eslint": "^1.10.3",
+    "eslint-loader": "^1.2.1",
     "gulp": "^3.9.0",
     "gulp-clean": "^0.3.1",
     "gulp-concat": "^2.6.0",
@@ -19,12 +32,13 @@
     "gulp-sourcemap": "^1.0.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
+    "isparta-loader": "^2.0.0",
+    "istanbul-instrumenter-loader": "^0.1.3",
     "jasmine": "^2.4.1",
     "jasmine-core": "^2.4.1",
     "jasmine-reporters": "^2.1.1",
     "jshint": "^2.9.1",
     "karma": "^0.13.19",
-    "karma-browserify": "^4.4.2",
     "karma-chrome-launcher": "^0.2.2",
     "karma-coverage": "^0.5.3",
     "karma-firefox-launcher": "^0.1.7",
@@ -33,9 +47,10 @@
     "karma-junit-reporter": "^0.3.8",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-spec-reporter": "0.0.23",
+    "karma-webpack": "^1.7.0",
     "phantomjs": "^2.1.3",
-    "phantomjs-prebuilt": "^2.1.3",
     "run-sequence": "^1.1.5",
-    "sinon": "sinonjs/sinon"
+    "sinon": "sinonjs/sinon",
+    "webpack": "^1.12.13"
   }
 }

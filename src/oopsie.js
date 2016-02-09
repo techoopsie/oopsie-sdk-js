@@ -1,23 +1,21 @@
+import RestHelper from './RestHelper';
+import OopsieService from './OopsieService';
+import OopsieResource from './OopsieResource';
 
-(function () {
-    'use strict';
+class Oopsie {
 
-    var oopsie = window.Oopsie = function Oopsie(appId, callback) {
+    constructor(appId, callback) {
 
         if (appId === undefined) {
             throw new Error('Oopsie needs an App Id to work.');
         }
-
-        if ( !(this instanceof Oopsie) ) {
-            return new Oopsie(appId, callback);
-        }
-
+        this._name = 'Oopsie';
         this.appId = appId;
         this.meta = {};
         this.resources = {};
         var self = this;
 
-        OopsieUtil.__RestHelper.get('http://localhost').then(function(meta) {
+        RestHelper.get('http://localhost').then(function(meta) {
 
             self.meta = meta;
             self.resources = meta.properties;
@@ -28,12 +26,14 @@
             callback(err);
 
         });
+    }
 
-        return this;
+    get name() {
+        return this._name;
+    }
 
-    };
 
-    oopsie.prototype.getResource = function(resourceName) {
+    getResource(resourceName) {
         if (resourceName === undefined) {
             throw new Error('OopsieResource needs an resource in the constructor.');
         }
@@ -45,34 +45,34 @@
             }
             availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
             throw new Error('Resource ' + resourceName + ' doesnt exist in your application. ' +
-                 '\n Available resources are: ' + availableResourceNames);
+                '\n Available resources are: ' + availableResourceNames);
         }
 
         return new OopsieResource(resourceName, this.resources[resourceName]);
-    };
+    }
 
-    /*
-     *  Requests to get/save OopsieResources
-     *
-     */
+            /*
+             *  Requests to get/save OopsieResources
+             *
+             */
 
-	oopsie.prototype.getAll = function (resourceName, callback) {
+    getAll(resourceName, callback) {
 
-        OopsieUtil.__service.getAll(resourceName, callback);
+        OopsieService.getAll(resourceName, callback);
 
-	};
+    }
 
-    oopsie.prototype.save = function(oopsieResource, callback) {
+    save(oopsieResource, callback) {
 
         if (!oopsieResource || ! (oopsieResource instanceof OopsieResource) ) {
             throw new Error('Save neeeds an OopsieResource as first argument.');
         }
 
-        OopsieUtil.__service.save(oopsieResource, callback);
+        OopsieService.save(oopsieResource, callback);
 
-    };
+    }
 
-    oopsie.prototype.get = function(resourceName, id, callback) {
+    get(resourceName, id, callback) {
 
         if (!resourceName) {
             throw new Error('ResourceName can\'t be null or undefined');
@@ -82,20 +82,19 @@
             throw new Error('Id can\'t be null or undefined');
         }
 
-        if (!hasResource(resourceName, this.resources)) {
+        if (!this._hasResource(resourceName, this.resources)) {
             throw new Error('Resource: ' + resourceName + ' doesn\'t exist.');
         }
 
-        OopsieUtil.__service.get(resourceName, id, callback);
+        OopsieService.get(resourceName, id, callback);
 
-    };
-
+    }
 
     /* Helpers */
-
-    function hasResource(resourceName, resources) {
+    _hasResource(resourceName, resources) {
         return resources[resourceName] !== undefined;
     }
 
+};
 
-}());
+export default Oopsie;

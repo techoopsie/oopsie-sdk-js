@@ -1,6 +1,9 @@
 var sinon = require('sinon');
 var mock = require('./server.mock');
 
+//import Oopsie from './../dist/Oopsie.js';
+//import Oopsie from './../src/index.js';
+
 describe('Oopsie should ', function() {
     'use strict';
     var url, oopsie, resourceName, appId;
@@ -30,9 +33,15 @@ describe('Oopsie should ', function() {
         expect(Oopsie).toBeDefined();
     });
 
+    it('throw an exception if new not used', function() {
+        expect(function() { Oopsie(appId); }).toThrow(
+            new Error('Cannot call a class as a function')
+        );
+    })
+
     it('not be added to window when not using new.', function() {
 
-        var oopsie = Oopsie(appId);
+        var oopsie = new Oopsie(appId);
         oopsie.notAddedToWindow = false;
         expect(window.notAddedToWindow).toBeUndefined();
 
@@ -93,7 +102,7 @@ describe('Oopsie should ', function() {
             it('domainObjects of specific type', function(done) {
 
                 mock.serverMock('http://localhost/' + resourceName, 'GET', mock.persons);
-
+                console.log(oopsie);
                 oopsie.getAll(resourceName, function(err, oopsieResources) {
 
                     if (err) {
