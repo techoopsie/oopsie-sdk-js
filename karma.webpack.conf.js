@@ -71,7 +71,7 @@ module.exports = function(config) {
 
 
     preprocessors: {
-      'src/**/*.js': [ 'webpack' ],
+      'src/**/*.js': [ 'webpack', 'coverage' ],
       'test/**/*.spec.js': [ 'webpack' ]
     },
 
@@ -83,7 +83,7 @@ module.exports = function(config) {
 
 
     coverageReporter: {
-      type: 'cobertura',
+      type: 'html',
       dir: 'coverage/'
     },
 
