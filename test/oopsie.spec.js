@@ -2,7 +2,7 @@ var sinon = require('sinon');
 var mock = require('./server.mock');
 
 //import Oopsie from './../dist/Oopsie.js';
-//import Oopsie from './../src/index.js';
+import Oopsie from './../src/index.js';
 
 describe('Oopsie should ', function() {
     'use strict';
@@ -37,7 +37,7 @@ describe('Oopsie should ', function() {
         expect(function() { Oopsie(appId); }).toThrow(
             new Error('Cannot call a class as a function')
         );
-    })
+    });
 
     it('not be added to window when not using new.', function() {
 
