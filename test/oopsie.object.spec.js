@@ -3,6 +3,7 @@ var mock = require('./server.mock');
 
 //import Oopsie from './../src/index.js';
 import Oopsie from './../src/index.js';
+import Config from './../src/config';
 
 describe('OopsieResource should ', function() {
     'use strict';
@@ -15,11 +16,11 @@ describe('OopsieResource should ', function() {
         lastName = 'Lastname';
         resourceName = 'person';
 
-        server = mock.serverMock('http://localhost', 'GET', mock.getMetaData());
 
-        var appId = '123456-abcdef';
+        var webResourceId = '123456-abcdef';
+        server = mock.serverMock(Config.url.api + webResourceId + '/meta', 'GET', mock.getMetaData());
 
-        oopsie = new Oopsie(appId, function(data) {
+        oopsie = new Oopsie(webResourceId, function(data) {
             done();
         });
     });

@@ -1,21 +1,22 @@
 import RestHelper from './RestHelper';
 import OopsieService from './OopsieService';
 import OopsieResource from './OopsieResource';
+import Config from './config';
 
 class Oopsie {
 
-    constructor(appId, callback) {
+    constructor(webResourceId, callback) {
 
-        if (appId === undefined) {
-            throw new Error('Oopsie needs an App Id to work.');
+        if (webResourceId === undefined) {
+            throw new Error('Oopsie needs an webResourceId to work.');
         }
         this._name = 'Oopsie';
-        this.appId = appId;
+        this.webResourceId = webResourceId;
         this.meta = {};
         this.resources = {};
         var self = this;
 
-        RestHelper.get('http://localhost').then(function(meta) {
+        RestHelper.get(Config.url.api + webResourceId + '/meta').then(function(meta) {
 
             self.meta = meta;
             self.resources = meta.properties;

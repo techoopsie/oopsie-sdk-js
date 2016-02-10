@@ -3,18 +3,20 @@ var mock = require('./server.mock');
 
 //import Oopsie from './../dist/Oopsie.js';
 import Oopsie from './../src/index.js';
+import Config from './../src/config.js';
 
 describe('Oopsie should ', function() {
     'use strict';
-    var url, oopsie, resourceName, appId;
+    var url, oopsie, resourceName, webResourceId;
 
     beforeEach(function(done) {
 
         resourceName = 'person';
-        mock.serverMock('http://localhost', 'GET', mock.getMetaData());
 
-        appId = '123456-abcdef';
-        oopsie = new Oopsie(appId, function(err) {
+        webResourceId = '123456-abcdef';
+        mock.serverMock(Config.url.api + webResourceId + '/meta', 'GET', mock.getMetaData());
+
+        oopsie = new Oopsie(webResourceId, function(err) {
             if (err) {
                 console.log(err.message);
             }
@@ -34,14 +36,14 @@ describe('Oopsie should ', function() {
     });
 
     it('throw an exception if new not used', function() {
-        expect(function() { Oopsie(appId); }).toThrow(
+        expect(function() { Oopsie(webResourceId); }).toThrow(
             new Error('Cannot call a class as a function')
         );
     });
 
     it('not be added to window when not using new.', function() {
 
-        var oopsie = new Oopsie(appId);
+        var oopsie = new Oopsie(webResourceId);
         oopsie.notAddedToWindow = false;
         expect(window.notAddedToWindow).toBeUndefined();
 
@@ -69,7 +71,7 @@ describe('Oopsie should ', function() {
 
     it('not be able to create a new object', function() {
         expect(function() { new Oopsie(); }).toThrow(
-            new Error('Oopsie needs an App Id to work.')
+            new Error('Oopsie needs an webResourceId to work.')
         );
     });
 
@@ -77,7 +79,7 @@ describe('Oopsie should ', function() {
 
         var notWorkingAppId = 'fakeId';
         var message = 'Resource doesn\'t exist';
-        mock.serverMock('http://localhost', 'GET', message, mock.NOT_FOUND);
+        mock.serverMock(Config.url.api + notWorkingAppId + '/meta', 'GET', message, mock.NOT_FOUND);
 
         new Oopsie(notWorkingAppId, function(err) {
             expect(err.status).toEqual(mock.NOT_FOUND);
@@ -102,7 +104,7 @@ describe('Oopsie should ', function() {
             it('domainObjects of specific type', function(done) {
 
                 mock.serverMock('http://localhost/' + resourceName, 'GET', mock.persons);
-                console.log(oopsie);
+
                 oopsie.getAll(resourceName, function(err, oopsieResources) {
 
                     if (err) {

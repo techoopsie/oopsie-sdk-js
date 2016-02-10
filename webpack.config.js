@@ -29,7 +29,7 @@ var config = {
       {
         test: /(\.jsx|\.js)$/,
         loader: 'babel',
-        exclude: /(node_modules|bower_components|config)/
+        exclude: /(node_modules|bower_components|dist)/
       },
       {
         test: /(\.jsx|\.js)$/,
