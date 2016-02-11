@@ -95,7 +95,7 @@ describe('Oopsie should ', function() {
 
         beforeEach(function() {
 
-            oopsieResource = oopsie.getResource(resourceName);
+            oopsieResource = oopsie.createResource(resourceName);
 
         });
 
@@ -255,7 +255,7 @@ describe('Oopsie should ', function() {
             it('store the object and return a new OopsieResource', function(done) {
 
 
-                var oopsieResource = oopsie.getResource(resourceName);
+                var oopsieResource = oopsie.createResource(resourceName);
                 var changedLastName = 'testLastName';
                 oopsieResource.setLastName(changedLastName);
 

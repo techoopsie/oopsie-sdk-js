@@ -3,7 +3,7 @@
 const Config = {
 
     url: {
-        api: 'owsapi/v1/rs/ws/'
+        api: 'http://localhost:8080/owsapi/rs/v1/ws/'
     }
 
 

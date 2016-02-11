@@ -1,6 +1,7 @@
 import RestHelper from './RestHelper';
 import OopsieService from './OopsieService';
 import OopsieResource from './OopsieResource';
+import Meta from './meta/Meta';
 import Config from './config';
 
 class Oopsie {
@@ -13,13 +14,11 @@ class Oopsie {
         this._name = 'Oopsie';
         this.webResourceId = webResourceId;
         this.meta = {};
-        this.resources = {};
         var self = this;
 
         RestHelper.get(Config.url.api + webResourceId + '/meta').then(function(meta) {
-
-            self.meta = meta;
-            self.resources = meta.properties;
+            console.log("Creating meta");
+            self.meta = new Meta(meta);
             callback();
 
         }, function(err) {
@@ -34,28 +33,21 @@ class Oopsie {
     }
 
 
-    getResource(resourceName) {
+    createResource(resourceName) {
         if (resourceName === undefined) {
             throw new Error('OopsieResource needs an resource in the constructor.');
         }
 
-        if (this.resources[resourceName] === undefined) {
-            var availableResourceNames = '';
-            for (var resource in this.resources) {
-                availableResourceNames += resource + ', ';
-            }
-            availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
-            throw new Error('Resource ' + resourceName + ' doesnt exist in your application. ' +
-                '\n Available resources are: ' + availableResourceNames);
-        }
-
-        return new OopsieResource(resourceName, this.resources[resourceName]);
+        var resourceMeta = this.meta.getResourceByName(resourceName);
+        console.log("Creating resource with ");
+        console.log(resourceMeta);
+        return new OopsieResource(resourceName, resourceMeta);
     }
 
-            /*
-             *  Requests to get/save OopsieResources
-             *
-             */
+    /*
+    *  Requests to get/save OopsieResources
+    *
+    */
 
     getAll(resourceName, callback) {
 
@@ -83,17 +75,12 @@ class Oopsie {
             throw new Error('Id can\'t be null or undefined');
         }
 
-        if (!this._hasResource(resourceName, this.resources)) {
+        if (!this.meta.hasResource(resourceName)) {
             throw new Error('Resource: ' + resourceName + ' doesn\'t exist.');
         }
 
         OopsieService.get(resourceName, id, callback);
 
-    }
-
-    /* Helpers */
-    _hasResource(resourceName, resources) {
-        return resources[resourceName] !== undefined;
     }
 
 };

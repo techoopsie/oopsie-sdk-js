@@ -1,38 +1,36 @@
 class OopsieResource {
 
-    constructor(resourceName, resource) {
+    constructor(resourceName, resourceMeta) {
         this.resourceName = resourceName;
-        this.resource = resource;
+        this.resourceMeta = resourceMeta;
         this._items = {};
-        this.setupGettersAndSetters();
-        this.setValues();
+        this._setupGettersAndSetters();
+        this._setValues();
     }
 
-    setupGettersAndSetters() {
+    _setupGettersAndSetters() {
 
-        for (var key in this.resource) {
+        for (let attribute of this.resourceMeta.getAttributes()) {
             /*jslint evil: true */
-            var name = key;
-            var nameOfItemWithUppercase = this._capitalizeFirstLetter(name);
+            var key = attribute.getKey();
+            var nameOfItemWithUppercase = this._capitalizeFirstLetter(key);
             var setter = 'set' + nameOfItemWithUppercase;
             var getter = 'get' + nameOfItemWithUppercase;
-            this[setter] = new Function('value', 'this.__addItem("' + key + '", value);');
-            this[getter] = new Function('return this.__getItem("' + key + '");');
+            this[setter] = new Function('value', 'this.__addItem("' + name + '", value);');
+            this[getter] = new Function('return this.__getItem("' + name + '");');
         }
 
     }
 
-    setValues() {
+    _setValues() {
 
-        for (var key in this.resource) {
+        for (var value of this.resourceMeta.getAttributes()) {
 
-            var resource = this.resource[key];
-
-            if (resource === '' || resource === undefined) {
+            if (value === '' || value === undefined) {
                 continue;
             }
 
-            this.__addItem(key, resource);
+            this.__addItem(value.getKey(), value.getValue());
         }
 
     }
@@ -42,7 +40,8 @@ class OopsieResource {
     }
 
     __addItem(key, value) {
-        this._items[key] = value;
+        console.log("Adding item " + key + " value " + value);
+        this._items[key].value = value;
     }
 
     __getItem(key) {
