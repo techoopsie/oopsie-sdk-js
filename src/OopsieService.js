@@ -32,7 +32,7 @@ const OopsieService = {
 
     save: function(oopsieResource, callback) {
 
-        RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource).then(function(resource) {
+        RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource.getItem()).then(function(resource) {
 
             try {
 

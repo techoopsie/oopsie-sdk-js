@@ -1,18 +1,21 @@
 class OopsieResource {
 
-    constructor(resourceName, resourceMeta) {
+    constructor(resourceName, meta) {
         this.resourceName = resourceName;
-        this.resourceMeta = resourceMeta;
+        this.meta = meta;
+        this.resources = this.meta.getAttributesByResourceName(resourceName);
+        console.log(this.resources);
         this._items = {};
-        this._setupGettersAndSetters();
+        this._setupGettersAndSetters(resourceName);
         this._setValues();
     }
 
-    _setupGettersAndSetters() {
-
-        for (let attribute of this.resourceMeta.getAttributes()) {
+    _setupGettersAndSetters(resourceName) {
+        console.log("setupGetters");
+        console.log(this.meta);
+        for (var key in this.resources) {
             /*jslint evil: true */
-            var key = attribute.getKey();
+            var name = key;
             var nameOfItemWithUppercase = this._capitalizeFirstLetter(key);
             var setter = 'set' + nameOfItemWithUppercase;
             var getter = 'get' + nameOfItemWithUppercase;
@@ -24,13 +27,15 @@ class OopsieResource {
 
     _setValues() {
 
-        for (var value of this.resourceMeta.getAttributes()) {
-
+        for (var key in this.resources) {
+            console.log(key);
+            console.log(this.resourceMeta);
+            var value = this.resourceMeta[key];
             if (value === '' || value === undefined) {
                 continue;
             }
 
-            this.__addItem(value.getKey(), value.getValue());
+            this.__addItem(key, value);
         }
 
     }
@@ -41,6 +46,7 @@ class OopsieResource {
 
     __addItem(key, value) {
         console.log("Adding item " + key + " value " + value);
+        this._item[key] = {};
         this._items[key].value = value;
     }
 

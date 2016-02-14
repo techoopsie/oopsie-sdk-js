@@ -11,11 +11,10 @@ class Meta {
             var resourceMetas = new ResourceMetas(resourceMetas);
             self.resourceMetas[resourceMetas.getName()] = resourceMetas;
         })
-        console.log("Created meta");
 
     }
 
-    getResourceByName(resourceName) {
+    getAttributesByResourceName(resourceName) {
 
         var resource = this.resourceMetas[resourceName];
 

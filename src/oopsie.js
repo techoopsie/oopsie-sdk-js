@@ -17,7 +17,7 @@ class Oopsie {
         var self = this;
 
         RestHelper.get(Config.url.api + webResourceId + '/meta').then(function(meta) {
-            console.log("Creating meta");
+
             self.meta = new Meta(meta);
             callback();
 
@@ -37,11 +37,8 @@ class Oopsie {
         if (resourceName === undefined) {
             throw new Error('OopsieResource needs an resource in the constructor.');
         }
-
-        var resourceMeta = this.meta.getResourceByName(resourceName);
-        console.log("Creating resource with ");
-        console.log(resourceMeta);
-        return new OopsieResource(resourceName, resourceMeta);
+        console.log(this.meta);
+        return new OopsieResource(resourceName, this.meta);
     }
 
     /*

@@ -7,15 +7,12 @@ class ResourceMetas {
         this._name = resourceMetas.name;
         this._attributes = {};
         var self = this;
-        console.log("Creating resourceMetas");
-        for (var value of resourceMetas.attributeMetas) {
+
+        for (let value of resourceMetas.attributeMetas) {
             var attribute = new Attribute(value);
-            console.log("Attribute created");
-            console.log(attribute);
             self._attributes[attribute.getName()] = attribute;
         }
-        console.log("Created resourceMetas");
-        this._filterMetas = resourceMetas.filterMetas;
+
     }
 
     getId() {
