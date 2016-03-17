@@ -1,26 +1,24 @@
+import RestHelper from './RestHelper';
+import OopsieService from './OopsieService';
+import OopsieResource from './OopsieResource';
+import Meta from './meta/Meta';
+import Config from './config';
 
-(function () {
-    'use strict';
+class Oopsie {
 
-    var oopsie = window.Oopsie = function Oopsie(appId, callback) {
+    constructor(webResourceId, callback) {
 
-        if (appId === undefined) {
-            throw new Error('Oopsie needs an App Id to work.');
+        if (webResourceId === undefined) {
+            throw new Error('Oopsie needs an webResourceId to work.');
         }
-
-        if ( !(this instanceof Oopsie) ) {
-            return new Oopsie(appId, callback);
-        }
-
-        this.appId = appId;
+        this._name = 'Oopsie';
+        this.webResourceId = webResourceId;
         this.meta = {};
-        this.resources = {};
         var self = this;
 
-        OopsieUtil.__RestHelper.get('http://localhost').then(function(meta) {
+        RestHelper.get(Config.url.api + webResourceId + '/meta').then(function(meta) {
 
-            self.meta = meta;
-            self.resources = meta.properties;
+            self.meta = new Meta(meta);
             callback();
 
         }, function(err) {
@@ -28,51 +26,43 @@
             callback(err);
 
         });
+    }
 
-        return this;
+    get name() {
+        return this._name;
+    }
 
-    };
 
-    oopsie.prototype.getResource = function(resourceName) {
+    createResource(resourceName) {
         if (resourceName === undefined) {
             throw new Error('OopsieResource needs an resource in the constructor.');
         }
-
-        if (this.resources[resourceName] === undefined) {
-            var availableResourceNames = '';
-            for (var resource in this.resources) {
-                availableResourceNames += resource + ', ';
-            }
-            availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
-            throw new Error('Resource ' + resourceName + ' doesnt exist in your application. ' +
-                 '\n Available resources are: ' + availableResourceNames);
-        }
-
-        return new OopsieResource(resourceName, this.resources[resourceName]);
-    };
+        console.log(this.meta);
+        return new OopsieResource(resourceName, this.meta);
+    }
 
     /*
-     *  Requests to get/save OopsieResources
-     *
-     */
+    *  Requests to get/save OopsieResources
+    *
+    */
 
-	oopsie.prototype.getAll = function (resourceName, callback) {
+    getAll(resourceName, callback) {
 
-        OopsieUtil.__service.getAll(resourceName, callback);
+        OopsieService.getAll(resourceName, callback);
 
-	};
+    }
 
-    oopsie.prototype.save = function(oopsieResource, callback) {
+    save(oopsieResource, callback) {
 
         if (!oopsieResource || ! (oopsieResource instanceof OopsieResource) ) {
             throw new Error('Save neeeds an OopsieResource as first argument.');
         }
 
-        OopsieUtil.__service.save(oopsieResource, callback);
+        OopsieService.save(oopsieResource, callback);
 
-    };
+    }
 
-    oopsie.prototype.get = function(resourceName, id, callback) {
+    get(resourceName, id, callback) {
 
         if (!resourceName) {
             throw new Error('ResourceName can\'t be null or undefined');
@@ -82,20 +72,14 @@
             throw new Error('Id can\'t be null or undefined');
         }
 
-        if (!hasResource(resourceName, this.resources)) {
+        if (!this.meta.hasResource(resourceName)) {
             throw new Error('Resource: ' + resourceName + ' doesn\'t exist.');
         }
 
-        OopsieUtil.__service.get(resourceName, id, callback);
+        OopsieService.get(resourceName, id, callback);
 
-    };
-
-
-    /* Helpers */
-
-    function hasResource(resourceName, resources) {
-        return resources[resourceName] !== undefined;
     }
 
+};
 
-}());
+export default Oopsie;

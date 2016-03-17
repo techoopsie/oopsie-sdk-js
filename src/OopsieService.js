@@ -1,80 +1,80 @@
-(function (oopsie) {
-    'use strict';
+import RestHelper from './RestHelper';
+import OopsieResource from './OopsieResource';
 
-    oopsie.__service = {
+const OopsieService = {
 
-    	getAll: function (resourceName, callback) {
+    getAll: function(resourceName, callback) {
 
-            OopsieUtil.__RestHelper.get('http://localhost/' + resourceName).then(function(resources) {
-                var oopsieResources = [];
+        RestHelper.get('http://localhost/' + resourceName).then(function(resources) {
+            var oopsieResources = [];
 
-                try {
+            try {
 
-                    for (var resource in resources) {
-                        oopsieResources.push(new OopsieResource(resourceName, resources[resource]));
-                    }
-
-                } catch(err) {
-
-                    callback(err, null);
-
+                for (var resource in resources) {
+                    oopsieResources.push(new OopsieResource(resourceName, resources[resource]));
                 }
 
-                callback(null, oopsieResources);
-
-            }, function(err) {
+            } catch(err) {
 
                 callback(err, null);
 
-            });
+            }
 
-    	},
+            callback(null, oopsieResources);
 
-        save: function(oopsieResource, callback) {
+        }, function(err) {
 
-            OopsieUtil.__RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource).then(function(resource) {
+            callback(err, null);
 
-                try {
+        });
 
-                    oopsieResource = new OopsieResource(oopsieResource.resourceName, resource);
-                    callback(null, oopsieResource);
+    },
 
-                } catch(err) {
+    save: function(oopsieResource, callback) {
 
-                    callback(err, null);
+        RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource.getItem()).then(function(resource) {
 
-                }
+            try {
 
-            }, function(err) {
+                oopsieResource = new OopsieResource(oopsieResource.resourceName, resource);
+                callback(null, oopsieResource);
 
-                callback(err, null);
-
-            });
-
-        },
-
-        get: function(resourceName, id, callback) {
-
-            OopsieUtil.__RestHelper.get('http://localhost/' + resourceName + '/' + id).then(function(resource) {
-
-                try {
-
-                    var oopsieResource = new OopsieResource(resourceName, resource);
-                    callback(null, oopsieResource);
-
-                } catch(err) {
-
-                    callback(err, null);
-
-                }
-
-            }, function(err) {
+            } catch(err) {
 
                 callback(err, null);
 
-            });
-        }
+            }
 
-    };
+        }, function(err) {
 
-}(window.OopsieUtil));
+            callback(err, null);
+
+        });
+
+    },
+
+    get: function(resourceName, id, callback) {
+
+        RestHelper.get('http://localhost/' + resourceName + '/' + id).then(function(resource) {
+
+            try {
+
+                var oopsieResource = new OopsieResource(resourceName, resource);
+                callback(null, oopsieResource);
+
+            } catch(err) {
+
+                callback(err, null);
+
+            }
+
+        }, function(err) {
+
+            callback(err, null);
+
+        });
+    }
+
+};
+
+export default OopsieService;

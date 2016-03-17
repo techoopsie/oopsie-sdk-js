@@ -12,23 +12,27 @@ var mock = {
 
     persons: [
         {
-            'lastName': 'Andersson',
-            'firstName': 'Andreas'
+            'name': 'lastName',
+            'type': 'TEXT'
         }, {
-            'lastName': 'Gullstrand',
-            'firstName': 'Nicolas'
-        }, {
-            'lastName': 'Andersson',
-            'firstName': 'Bengt'
+            'name': 'firstName',
+            'type': 'TEXT'
         }
     ],
 
     getMetaData: function() {
-        return { 'properties':
-            {
-                'person': this.person
-            }
-        };
+        return {
+            'customerId': '1',
+            'webServiceId': '1',
+            'resourceMetas': [
+                {
+                    'resourceId': '1-persons-id',
+                    'name': 'person',
+                    'attributeMetas': this.persons,
+                    'filterMetas': []
+                }
+            ]
+        }
     },
 
     getErrorMessage: function() {
