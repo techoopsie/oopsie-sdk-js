@@ -14,13 +14,16 @@ describe('OopsieResource should ', function() {
 
         firstName = 'TestUser';
         lastName = 'Lastname';
-        resourceName = 'person';
+        resourceName = 'persons';
 
 
         var webResourceId = '1';
         server = mock.serverMock(Config.url.api + webResourceId + '/meta', 'GET', mock.getMetaData());
 
-        oopsie = new Oopsie(webResourceId, function(data) {
+        oopsie = new Oopsie(webResourceId, function(err) {
+            if (err) {
+                console.err('Got an error: ' + err.message);
+            }
             done();
         });
     });
@@ -88,11 +91,11 @@ describe('OopsieResource should ', function() {
 
     it('work for user as this.', function() {
 
-        var person = oopsie.createResource('person');
+        var person = oopsie.createResource(resourceName);
         person.setFirstName(firstName);
         person.setLastName(lastName);
 
-        var myMother = oopsie.createResource('person');
+        var myMother = oopsie.createResource(resourceName);
         myMother.setFirstName('Anna');
         myMother.setLastName('Andersson');
 
@@ -104,7 +107,7 @@ describe('OopsieResource should ', function() {
 
         beforeEach(function() {
 
-            oopsieObject = oopsie.createResource('person');
+            oopsieObject = oopsie.createResource(resourceName);
 
         });
 
@@ -114,15 +117,6 @@ describe('OopsieResource should ', function() {
             expect(oopsieObject.getFirstName).toBeDefined();
             expect(oopsieObject.setLastName).toBeDefined();
             expect(oopsieObject.setFirstName).toBeDefined();
-
-        });
-
-        it('set firstname to TestUser and lastName to LASTNAME', function() {
-
-            oopsieObject.setFirstName(firstName);
-            oopsieObject.setLastName(lastName);
-            expect(oopsieObject.getItem().firstName).toBe(firstName);
-            expect(oopsieObject.getItem().lastName).toBe(lastName);
 
         });
 

@@ -6,12 +6,19 @@ class Meta {
 
         this.webServiceId = meta.webServiceId;
         this.resourceMetas = {};
+
         var self = this;
-        meta.resourceMetas.forEach(function(resourceMetas) {
+        for (var index in meta.resourceMetas) {
+            var resourceMetas = meta.resourceMetas[index];
             var resourceMetas = new ResourceMetas(resourceMetas);
             self.resourceMetas[resourceMetas.getName()] = resourceMetas;
-        })
 
+        };
+
+    }
+
+    getResourceId(resourceName) {
+        return this.resourceMetas[resourceName].getId();
     }
 
     getAttributesByResourceName(resourceName) {
@@ -23,9 +30,10 @@ class Meta {
         }
 
         var availableResourceNames = '';
-        this.resourceMetas.forEach(function(resource) {
-            availableResourceNames += resource.getName() + ', ';
-        })
+
+        for (var key in this.resourceMetas) {
+            availableResourceNames += key + ', ';
+        }
 
         availableResourceNames = availableResourceNames.slice(0, availableResourceNames.length - 2);
         throw new Error('Resource ' + resourceName + ' doesnt exist in your application. ' +

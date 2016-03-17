@@ -1,41 +1,32 @@
 class OopsieResource {
 
-    constructor(resourceName, meta) {
+    constructor(resourceName, resources, id) {
         this.resourceName = resourceName;
-        this.meta = meta;
-        this.resources = this.meta.getAttributesByResourceName(resourceName);
-        console.log(this.resources);
-        this._items = {};
+        this.id = id;
+        // Clone object.
+        this.resources = JSON.parse(JSON.stringify(resources));
+        
         this._setupGettersAndSetters(resourceName);
-        this._setValues();
     }
 
-    _setupGettersAndSetters(resourceName) {
-        console.log("setupGetters");
-        console.log(this.meta);
-        for (var key in this.resources) {
-            /*jslint evil: true */
-            var name = key;
-            var nameOfItemWithUppercase = this._capitalizeFirstLetter(key);
-            var setter = 'set' + nameOfItemWithUppercase;
-            var getter = 'get' + nameOfItemWithUppercase;
-            this[setter] = new Function('value', 'this.__addItem("' + name + '", value);');
-            this[getter] = new Function('return this.__getItem("' + name + '");');
+    print() {
+        var resources = this.getResources();
+        for (var key in resources) {
+            console.log(resources[key]);
         }
 
     }
 
-    _setValues() {
+    _setupGettersAndSetters(resourceName) {
 
         for (var key in this.resources) {
-            console.log(key);
-            console.log(this.resourceMeta);
-            var value = this.resourceMeta[key];
-            if (value === '' || value === undefined) {
-                continue;
-            }
-
-            this.__addItem(key, value);
+            /*jslint evil: true */
+            var name = this.resources[key].name;
+            var nameOfItemWithUppercase = this._capitalizeFirstLetter(name);
+            var setter = 'set' + nameOfItemWithUppercase;
+            var getter = 'get' + nameOfItemWithUppercase;
+            this[setter] = new Function('value', 'this._addResourceValue("' + name + '", value);');
+            this[getter] = new Function('return this._getResourceValue("' + name + '");');
         }
 
     }
@@ -44,18 +35,16 @@ class OopsieResource {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    __addItem(key, value) {
-        console.log("Adding item " + key + " value " + value);
-        this._item[key] = {};
-        this._items[key].value = value;
+    _addResourceValue(key, value) {
+        this.resources[key].value = value;
     }
 
-    __getItem(key) {
-        return this._items[key];
+    _getResourceValue(key) {
+        return this.resources[key].value;
     }
 
-    getItem() {
-        return this._items;
+    getResources() {
+        return this.resources;
     }
 
 
