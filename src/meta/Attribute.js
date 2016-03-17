@@ -1,17 +1,17 @@
 class Attribute {
 
-    constructor(attribute) {
-        this.name = attribute.name;
-        this.value = attribute.value;
-        this.type = attribute.type;
+    constructor(name, type) {
+        this.name = name;
+        this.type = type;
+
+        this.verify(name);
+        this.verify(type);
     }
 
-    getValue() {
-        return this.value;
-    }
-
-    setValue(value) {
-        this.value = value;
+    verify(input) {
+        if (input === undefined) {
+            throw new Error('Attribute can\'t be undefined');
+        }
     }
 
     setName(name) {

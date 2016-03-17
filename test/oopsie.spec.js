@@ -7,13 +7,14 @@ import Config from './../src/config.js';
 
 describe('Oopsie should ', function() {
     'use strict';
-    var url, oopsie, resourceName, webResourceId;
+    var url, oopsie, resourceName, webResourceId, resourceId;
 
     beforeEach(function(done) {
 
-        resourceName = 'person';
-
+        resourceName = 'persons';
+        resourceId = mock.getMetaData().resourceMetas[0].resourceId;
         webResourceId = '123456-abcdef';
+
         mock.serverMock(Config.url.api + webResourceId + '/meta', 'GET', mock.getMetaData());
 
         oopsie = new Oopsie(webResourceId, function(err) {
@@ -35,17 +36,26 @@ describe('Oopsie should ', function() {
         expect(Oopsie).toBeDefined();
     });
 
+
+
     it('throw an exception if new not used', function() {
         expect(function() { Oopsie(webResourceId); }).toThrow(
             new Error('Cannot call a class as a function')
         );
     });
 
-    it('not be added to window when not using new.', function() {
+    it('not be added to window when not using new.', function(done) {
 
-        var oopsie = new Oopsie(webResourceId);
-        oopsie.notAddedToWindow = false;
-        expect(window.notAddedToWindow).toBeUndefined();
+        var oopsie = new Oopsie(webResourceId, function(err) {
+
+            if (err) {
+                fail('Got an error: ' + err.message);
+            }
+
+            oopsie.notAddedToWindow = false;
+            expect(window.notAddedToWindow).toBeUndefined();
+            done();
+        });
 
     });
 
@@ -91,19 +101,11 @@ describe('Oopsie should ', function() {
 
     describe('be able to call the backend to ', function() {
 
-        var oopsieResource;
-
-        beforeEach(function() {
-
-            oopsieResource = oopsie.createResource(resourceName);
-
-        });
-
         describe('getAll() ', function() {
 
             it('domainObjects of specific type', function(done) {
 
-                mock.serverMock('http://localhost/' + resourceName, 'GET', mock.persons);
+                mock.serverMock(Config.url.api + webResourceId + '/resources/' + resourceId, 'GET', mock.persons);
 
                 oopsie.getAll(resourceName, function(err, oopsieResources) {
 
@@ -116,12 +118,9 @@ describe('Oopsie should ', function() {
                     }
 
                     for (var index in oopsieResources) {
-
                         var oopsieResource =  oopsieResources[index];
-                        expect(oopsieResource.resource).toEqual(mock.persons[index]);
-                        expect(oopsieResource.getFirstName()).toEqual(mock.persons[index].firstName);
-                        expect(oopsieResource.getLastName()).toEqual(mock.persons[index].lastName);
-
+                        expect(oopsieResource.getFirstName()).toEqual(mock.persons[0].attributes.firstName.value);
+                        expect(oopsieResource.getLastName()).toEqual(mock.persons[0].attributes.lastName.value);
                     }
 
                     done();
@@ -130,10 +129,11 @@ describe('Oopsie should ', function() {
 
             });
 
+
             it('and throw an Exception if it is not an 200', function(done) {
 
                 var responseCode = 500;
-                mock.serverMock('http://localhost/' + resourceName, 'GET', mock.getErrorMessage(), 500);
+                mock.serverMock(Config.url.api + webResourceId + '/resources/' + resourceId, 'GET', mock.getErrorMessage(), 500);
 
                 oopsie.getAll(resourceName, function(err, oopsieResources) {
 
@@ -153,27 +153,25 @@ describe('Oopsie should ', function() {
 
         describe('get() should ', function() {
 
-            var id, resourceName;
+            var id;
 
             beforeEach(function() {
 
                 id = 'abcd-1234';
-                resourceName = 'person';
 
             });
 
             it('return specific OopsieResource', function(done) {
 
-                mock.serverMock('http://localhost/' + resourceName + '/' + id, 'GET', mock.person);
+                mock.serverMock(Config.url.api + webResourceId + '/resources/' + resourceId + '/' + id, 'GET', mock.persons[0]);
                 oopsie.get(resourceName, id, function(err, oopsieResource) {
 
                     if (err) {
                         fail('We should have retrieved the OopsieResource without Error: ' + err.message);
                     }
 
-                    expect(oopsieResource.resource).toEqual(mock.person);
-                    expect(oopsieResource.getFirstName()).toEqual(mock.person.firstName);
-                    expect(oopsieResource.getLastName()).toEqual(mock.person.lastName);
+                    expect(oopsieResource.getFirstName()).toEqual(mock.meta[1].value);
+                    expect(oopsieResource.getLastName()).toEqual(mock.meta[0].value);
                     done();
 
                 });
@@ -223,7 +221,7 @@ describe('Oopsie should ', function() {
 
             it('return error if OopsieResource not found', function(done) {
 
-                mock.serverMock('http://localhost/' + resourceName + '/' + id, 'GET', mock.getErrorMessage(), mock.NOT_FOUND);
+                mock.serverMock(Config.url.api + webResourceId + '/resources/' + resourceId + '/' + id, 'GET', mock.getErrorMessage(), mock.NOT_FOUND);
                 oopsie.get(resourceName, id, function(err, oopsieResource) {
 
                     if (!err) {
@@ -243,23 +241,16 @@ describe('Oopsie should ', function() {
 
         describe('save() should ', function() {
 
-            var id, resourceName;
-
-            beforeEach(function() {
-
-                id = 'abcd-1234';
-                resourceName = 'person';
-
-            });
+            var oopsieResource;
 
             it('store the object and return a new OopsieResource', function(done) {
 
+                oopsieResource = oopsie.createResource(resourceName);
 
-                var oopsieResource = oopsie.createResource(resourceName);
                 var changedLastName = 'testLastName';
                 oopsieResource.setLastName(changedLastName);
-
-                mock.serverMock('http://localhost/' + resourceName, 'POST', oopsieResource.getItem());
+                oopsieResource.id = 'fake-id';
+                mock.serverMock(Config.url.api + webResourceId + '/resources/' + resourceId, 'POST', mock.persons[0]);
 
                 oopsie.save(oopsieResource, function(err, or) {
 
@@ -268,8 +259,8 @@ describe('Oopsie should ', function() {
                         fail('We should have saved the oopsieResource and retrieved it.');
                     }
 
-                    expect(or.getFirstName()).toEqual(oopsieResource.getFirstName());
-                    expect(or.getLastName()).toEqual(changedLastName);
+                    expect(or.getFirstName()).toEqual(mock.persons[0].attributes.firstName.value);
+                    expect(or.getLastName()).toEqual(mock.persons[0].attributes.lastName.value);
 
                     done();
 
@@ -302,6 +293,28 @@ describe('Oopsie should ', function() {
                     new Error('Save neeeds an OopsieResource as first argument.')
                 );
 
+            });
+
+        });
+
+        describe('delete() should ', function() {
+
+            var id;
+
+            beforeEach(function() {
+                id = '123';
+            });
+
+            it('remove the Resource', function(done) {
+
+                mock.serverMock(Config.url.api + webResourceId + '/resources/' + resourceId + '/' + id, 'DELETE', null);
+
+                oopsie.delete(resourceName, id, function(err) {
+                    if (err) {
+                        fail('We should not have gotten an error ' + err.message);
+                    }
+                    done();
+                });
             });
 
         });

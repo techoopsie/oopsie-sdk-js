@@ -8,8 +8,9 @@ class ResourceMetas {
         this._attributes = {};
         var self = this;
 
-        for (let value of resourceMetas.attributeMetas) {
-            var attribute = new Attribute(value);
+        for (var key in resourceMetas.attributeMetas) {
+            var attributeMeta = resourceMetas.attributeMetas[key];
+            var attribute = new Attribute(attributeMeta.name, attributeMeta.type, attributeMeta.value);
             self._attributes[attribute.getName()] = attribute;
         }
 

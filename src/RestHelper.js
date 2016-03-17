@@ -29,12 +29,30 @@ const RestHelper = {
                 self.sendXMLHttpRequest(
                     url,
                     'POST',
-                    'item=' + JSON.stringify(item),
+                    '{"attributes":' + JSON.stringify(item) + '}',
                     resolve,
                     reject
                 );
 
             });
+        },
+
+        delete: function(url) {
+
+            var self = this;
+
+            return new Promise(function(resolve, reject) {
+
+                self.sendXMLHttpRequest(
+                    url,
+                    'DELETE',
+                    null,
+                    resolve,
+                    reject
+                );
+
+            });
+
         },
 
         appendFirstSlash: function(url) {
@@ -46,18 +64,19 @@ const RestHelper = {
 
         sendXMLHttpRequest: function(url, method, item, resolve, reject) {
             var xhr = new XMLHttpRequest();
+            
             xhr.onreadystatechange = function() {
 
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-
                     resolve(JSON.parse(xhr.responseText));
 
                 } else if (xhr.readyState === XMLHttpRequest.DONE) {
 
                     var err = {
-                        message: JSON.parse(xhr.responseText),
+                        message: xhr.responseText === '' ? 'No error message' : JSON.parse(xhr.responseText),
                         status: xhr.status
                     };
+
                     reject(err);
 
                 }

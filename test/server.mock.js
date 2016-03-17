@@ -5,19 +5,47 @@ var mock = {
 
     NOT_FOUND: 404,
 
-    person: {
-        'lastName': 'Andersson',
-        'firstName': 'Andreas'
+    person1: {
+        'name': 'lastName',
+        'TYPE': 'TEXT',
+        'value': 'Andersson'
+    },
+
+    person2: {
+        'name': 'firstName',
+        'TYPE': 'TEXT',
+        'value': 'Bengt'
     },
 
     persons: [
         {
-            'name': 'lastName',
-            'type': 'TEXT'
-        }, {
-            'name': 'firstName',
-            'type': 'TEXT'
+            'id': 'fake-id-123',
+            'attributes': {
+                'lastName':
+                {
+                    'name': 'lastName',
+                    'type': 'TEXT',
+                    'value': 'Tornstrom'
+                },
+                'firstName': {
+                    'name': 'firstName',
+                    'type': 'TEXT',
+                    'value': 'Andreas'
+                }
+            }
         }
+    ],
+
+    meta: [
+        {
+                'name': 'lastName',
+                'type': 'TEXT',
+                'value': 'Tornstrom'
+            }, {
+                'name': 'firstName',
+                'type': 'TEXT',
+                'value': 'Andreas'
+            }
     ],
 
     getMetaData: function() {
@@ -27,8 +55,8 @@ var mock = {
             'resourceMetas': [
                 {
                     'resourceId': '1-persons-id',
-                    'name': 'person',
-                    'attributeMetas': this.persons,
+                    'name': 'persons',
+                    'attributeMetas': this.meta,
                     'filterMetas': []
                 }
             ]
@@ -63,7 +91,7 @@ var mock = {
             [
                 responseCode,
                 { 'Content-Type': 'application/json'},
-                JSON.stringify(data)
+                data === undefined ? '' : JSON.stringify(data)
             ]
         );
         server.respondImmediately = true;

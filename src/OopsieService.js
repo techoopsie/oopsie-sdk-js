@@ -1,17 +1,47 @@
 import RestHelper from './RestHelper';
 import OopsieResource from './OopsieResource';
+import Config from './config';
+import Meta from './meta/Meta';
 
-const OopsieService = {
+class OopsieService {
 
-    getAll: function(resourceName, callback) {
+    constructor(webServiceId, callback) {
+        this.webServiceId = webServiceId;
+        this.getMeta(callback);
+    }
 
-        RestHelper.get('http://localhost/' + resourceName).then(function(resources) {
+    setMeta(meta) {
+        this.meta = meta;
+    }
+
+    getMeta(callback) {
+
+        var self = this;
+        RestHelper.get(Config.url.api + this.webServiceId + '/meta').then(function(meta) {
+
+            self.meta = new Meta(meta);
+            callback(null, meta);
+
+        }, function(err) {
+
+            callback(err);
+
+        });
+
+    }
+
+    getAttributesByResourceName(resourceName) {
+        return this.meta.getAttributesByResourceName(resourceName);
+    }
+
+    getAll(resourceName, callback) {
+        var resourceId = this.meta.getResourceId(resourceName);
+        RestHelper.get(Config.url.api + this.webServiceId + '/resources/' + resourceId).then(function(resources) {
             var oopsieResources = [];
 
             try {
-
                 for (var resource in resources) {
-                    oopsieResources.push(new OopsieResource(resourceName, resources[resource]));
+                    oopsieResources.push(new OopsieResource(resourceName, resources[resource].attributes, resources[resource].id));
                 }
 
             } catch(err) {
@@ -28,15 +58,15 @@ const OopsieService = {
 
         });
 
-    },
+    }
 
-    save: function(oopsieResource, callback) {
-
-        RestHelper.post('http://localhost/' + oopsieResource.resourceName, oopsieResource.getItem()).then(function(resource) {
+    save(oopsieResource, callback) {
+        var resourceId = this.meta.getResourceId(oopsieResource.resourceName);
+        RestHelper.post(Config.url.api + this.webServiceId + '/resources/' + resourceId, oopsieResource.getResources()).then(function(resource) {
 
             try {
-
-                oopsieResource = new OopsieResource(oopsieResource.resourceName, resource);
+                
+                oopsieResource = new OopsieResource(oopsieResource.resourceName, resource.attributes, resource.id);
                 callback(null, oopsieResource);
 
             } catch(err) {
@@ -51,15 +81,15 @@ const OopsieService = {
 
         });
 
-    },
+    }
 
-    get: function(resourceName, id, callback) {
-
-        RestHelper.get('http://localhost/' + resourceName + '/' + id).then(function(resource) {
+    get(resourceName, id, callback) {
+        var resourceId = this.meta.getResourceId(resourceName);
+        RestHelper.get(Config.url.api + this.webServiceId + '/resources/' + resourceId + '/' + id).then(function(resource) {
 
             try {
 
-                var oopsieResource = new OopsieResource(resourceName, resource);
+                var oopsieResource = new OopsieResource(resourceName, resource.attributes, resource.id);
                 callback(null, oopsieResource);
 
             } catch(err) {
@@ -73,6 +103,23 @@ const OopsieService = {
             callback(err, null);
 
         });
+    }
+
+    delete(resourceName, id, callback) {
+        var resourceId = this.meta.getResourceId(resourceName);
+        RestHelper.delete(Config.url.api + this.webServiceId + '/resources/' + resourceId + '/' + id).then(function(resource) {
+
+            callback(null);
+
+        }, function(err) {
+
+            callback(err);
+
+        });
+    }
+
+    hasResource(resourceName) {
+        return this.meta.hasResource(resourceName);
     }
 
 };

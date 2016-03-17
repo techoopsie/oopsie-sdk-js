@@ -13,8 +13,8 @@ if (env === 'CI') {
 } else  {
 
     browsers.push('PhantomJS');
-    browsers.push('Chrome');
-    browsers.push('IEEdge');
+    //browsers.push('Chrome');
+    //browsers.push('IEEdge');
 
 }
 
@@ -65,7 +65,15 @@ module.exports = function(config) {
 
           ]
       },
-       watch:true
+       watch:true,
+       stats: {
+        assets: false,
+        colors: true,
+        children: false,
+        chunks: false,
+        modules: false,
+        chunkModules: false
+      }
      },
 
 

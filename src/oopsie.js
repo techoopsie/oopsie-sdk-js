@@ -1,7 +1,6 @@
 import RestHelper from './RestHelper';
 import OopsieService from './OopsieService';
 import OopsieResource from './OopsieResource';
-import Meta from './meta/Meta';
 import Config from './config';
 
 class Oopsie {
@@ -13,19 +12,14 @@ class Oopsie {
         }
         this._name = 'Oopsie';
         this.webResourceId = webResourceId;
-        this.meta = {};
         var self = this;
 
-        RestHelper.get(Config.url.api + webResourceId + '/meta').then(function(meta) {
+        this.oopsieService = new OopsieService(webResourceId, function(err, meta) {
 
-            self.meta = new Meta(meta);
-            callback();
-
-        }, function(err) {
-
-            callback(err);
+            callback(err, self);
 
         });
+
     }
 
     get name() {
@@ -37,8 +31,7 @@ class Oopsie {
         if (resourceName === undefined) {
             throw new Error('OopsieResource needs an resource in the constructor.');
         }
-        console.log(this.meta);
-        return new OopsieResource(resourceName, this.meta);
+        return new OopsieResource(resourceName, this.oopsieService.getAttributesByResourceName(resourceName));
     }
 
     /*
@@ -48,7 +41,7 @@ class Oopsie {
 
     getAll(resourceName, callback) {
 
-        OopsieService.getAll(resourceName, callback);
+        this.oopsieService.getAll(resourceName, callback);
 
     }
 
@@ -58,7 +51,7 @@ class Oopsie {
             throw new Error('Save neeeds an OopsieResource as first argument.');
         }
 
-        OopsieService.save(oopsieResource, callback);
+        this.oopsieService.save(oopsieResource, callback);
 
     }
 
@@ -72,13 +65,31 @@ class Oopsie {
             throw new Error('Id can\'t be null or undefined');
         }
 
-        if (!this.meta.hasResource(resourceName)) {
+        if (!this.oopsieService.hasResource(resourceName)) {
             throw new Error('Resource: ' + resourceName + ' doesn\'t exist.');
         }
 
-        OopsieService.get(resourceName, id, callback);
+        this.oopsieService.get(resourceName, id, callback);
 
     }
+
+    delete(resourceName, id, callback) {
+
+        if (!resourceName) {
+            throw new Error('ResourceName can\'t be null or undefined');
+        }
+
+        if (!id) {
+            throw new Error('Id can\'t be null or undefined');
+        }
+
+        if (!this.oopsieService.hasResource(resourceName)) {
+            throw new Error('Resource: ' + resourceName + ' doesn\'t exist.');
+        }
+
+        this.oopsieService.delete(resourceName, id, callback);
+
+    };
 
 };
 
