@@ -1,8 +1,9 @@
 # Setup and run
 
 
-  Install NodeJs (Current node version: 2.14.7, but will probably work with later versions as well.) 
+Install NodeJs (Current node version: 2.14.7, but will probably work with later versions as well.) 
 
+Install dependencies:
 
     npm install
 
