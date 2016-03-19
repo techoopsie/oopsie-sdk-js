@@ -1,16 +1,23 @@
-Setup and run
-
-npm install
-npm install gulp -g
-
-Gulp version:
-
-[22:30:51] CLI version 3.9.0
-[22:30:51] Local version 3.9.0
-
-Current node version: 2.14.7
+# Setup and run
 
 
-Compress and build files:
+  Install NodeJs (Current node version: 2.14.7, but will probably work with later versions as well.) 
 
-  gulp compress
+
+    npm install
+
+## Build dev and watch
+
+    npm run dev
+
+## Build production
+
+    npm run build
+
+## Run tests once
+  
+    npm run test
+    
+## Run tests with watch
+
+    npm run tdd
