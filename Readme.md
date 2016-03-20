@@ -1,16 +1,43 @@
-Setup and run
+# OWSJS
 
-npm install
-npm install gulp -g
+This is an repository with an JS SDK for use towards OWSAPI.
 
-Gulp version:
+# Example
 
-[22:30:51] CLI version 3.9.0
-[22:30:51] Local version 3.9.0
+    var oopsie = new Oopsie(webServiceId, function(err, oopsie) {
+    
+        // We are done loading meta data...
+    
+    });
+    
+    var oopsieResource = oopsie.createResource(resourceName);
+    
+    oopsie.save(oopsieResource, callback);
+    oopsie.delete(resourceName, id, callback);
+    oopsie.getAll(resourceName, callback);
+    oopsie.get(resourceName, id, callback);
 
-Current node version: 2.14.7
 
+# Development
 
-Compress and build files:
+Install NodeJs (Current node version: 2.14.7, but will probably work with later versions as well.) 
 
-  gulp compress
+Install dependencies:
+
+    npm install
+
+## Build dev and watch
+
+    npm run dev
+
+## Build production
+
+    npm run build
+
+## Run tests once
+  
+    npm run test
+    
+## Run tests with watch
+
+    npm run tdd
