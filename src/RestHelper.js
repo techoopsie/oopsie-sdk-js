@@ -64,11 +64,20 @@ const RestHelper = {
 
         sendXMLHttpRequest: function(url, method, item, resolve, reject) {
             var xhr = new XMLHttpRequest();
-            
+
             xhr.onreadystatechange = function() {
 
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                     resolve(JSON.parse(xhr.responseText));
+
+                }  else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 0) {
+
+                    var err = {
+                        message: 'Unknown Error Occured. Server response not received.',
+                        status: xhr.status
+                    };
+
+                    reject(err);
 
                 } else if (xhr.readyState === XMLHttpRequest.DONE) {
 

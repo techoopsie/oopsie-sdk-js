@@ -23,7 +23,7 @@ class OopsieService {
             callback(null, meta);
 
         }, function(err) {
-
+            
             callback(err);
 
         });
@@ -65,7 +65,7 @@ class OopsieService {
         RestHelper.post(Config.url.api + this.webServiceId + '/resources/' + resourceId, oopsieResource.getResources()).then(function(resource) {
 
             try {
-                
+
                 oopsieResource = new OopsieResource(oopsieResource.resourceName, resource.attributes, resource.id);
                 callback(null, oopsieResource);
 
