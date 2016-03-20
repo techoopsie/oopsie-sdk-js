@@ -5,7 +5,7 @@ class OopsieResource {
         this.id = id;
         // Clone object.
         this.resources = JSON.parse(JSON.stringify(resources));
-        
+
         this._setupGettersAndSetters(resourceName);
     }
 
@@ -36,6 +36,9 @@ class OopsieResource {
     }
 
     _addResourceValue(key, value) {
+        if (this.resources[key].type === 'INTEGER') {
+            value = parseInt(value, 10);
+        }
         this.resources[key].value = value;
     }
 
