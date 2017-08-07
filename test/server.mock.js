@@ -50,16 +50,54 @@ var mock = {
 
     getMetaData: function() {
         return {
-            'customerId': '1',
-            'webServiceId': '1',
-            'resourceMetas': [
-                {
-                    'resourceId': '1-persons-id',
-                    'name': 'persons',
-                    'attributeMetas': this.meta,
-                    'filterMetas': []
-                }
-            ]
+            "app": {
+                "resources": [
+                    {
+                        "id": "45f23078-1241-4161-8c6b-f242d2974363",
+                        "name": "rels",
+                        "attributes": [
+                            {
+                                "name": "name",
+                                "type": "TEXT_4",
+                                "relation": null,
+                                "id": "e452e120-dad0-47fe-a6a6-6c8648d6b225"
+                            }   
+                        ],
+                        "partitionKeys": [],
+                        "clusterKeys": [
+                        {
+                            "name": "eid",
+                            "type": "UUID",
+                            "relation": null,
+                            "id": null
+                        }
+                        ],
+                        "views": [],
+                        "auths": [
+                        {
+                            "i": "b309b59f-b3a7-488e-ab40-ff1c088e1da0",
+                            "n": "Admin",
+                            "p": "READ_ALL_WRITE_ALL"
+                        },
+                        {
+                            "i": "f45e7bb8-8a66-4746-b0c7-31ad7fd1fcb8",
+                            "n": "User",
+                            "p": "NONE"
+                        }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+
+    getEntities: function() {
+        return {
+            entities: [
+                { name: 'Name1' },
+                { name: 'Name2' }
+            ],
+            metadata: {}
         }
     },
 

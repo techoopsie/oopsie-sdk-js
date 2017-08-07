@@ -4,18 +4,28 @@ This is an repository with an JS SDK for use towards OWSAPI.
 
 # Example
 
-    var oopsie = new Oopsie(webServiceId, function(err, oopsie) {
+    var oopsie = new OopsieSite(apiEndpoint, siteId, customerId);
+    oopsie.init((err) => {
     
         // We are done loading meta data...
-    
+        // Now we can use oopsie to create, get, save, delete entities.
     });
-    
-    var oopsieResource = oopsie.createResource(resourceName);
-    
-    oopsie.save(oopsieResource, callback);
-    oopsie.delete(resourceName, id, callback);
-    oopsie.getAll(resourceName, callback);
-    oopsie.get(resourceName, id, callback);
+
+    var app = oopsie.getApp('PersonRepository');
+
+    var personResource = app.getResource('Person');
+
+    personResource.create().withParams({}).execute((err, resp) => {});
+    personResource.save().withParams({}).execute((err, resp) => {});
+    personResource.delete().withParams({}).execute((err) => {});
+
+    personResource.get().withParams({}).limit(100).execute(callback);
+    personResource.get().withParams({}).limit(100).expandRelations().execute(callback);
+    var query = personResource.get({}).byView('myView').limit(100).expandRelations().execute(callback);
+    query.nextPage(callback);
+    query.prevPage(callback);
+    query.hasNextPage();
+    query.hasPrevPage();
 
 
 # Development

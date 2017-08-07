@@ -2,6 +2,21 @@ import { Promise } from 'es6-promise';
 
 const RestHelper = {
 
+        setProdUrl: function(url) {
+            this.url = url;
+        },
+
+        getProdUrl: function() {
+            return this.url;
+        },
+
+        setCustomerId: function(customerId) {
+            this.customerId = customerId;
+        },
+
+        setSiteId: function(siteId) {
+            this.siteId = siteId;
+        },
 
         get: function(url) {
 
@@ -10,7 +25,7 @@ const RestHelper = {
             return new Promise(function(resolve, reject) {
 
                 self.sendXMLHttpRequest(
-                    url,
+                    self.url + url,
                     'GET',
                     null,
                     resolve,
@@ -27,9 +42,9 @@ const RestHelper = {
             return new Promise(function(resolve, reject) {
 
                 self.sendXMLHttpRequest(
-                    url,
+                    self.url + url,
                     'POST',
-                    '{"attributes":' + JSON.stringify(item) + '}',
+                    JSON.stringify(item),
                     resolve,
                     reject
                 );
@@ -44,7 +59,7 @@ const RestHelper = {
             return new Promise(function(resolve, reject) {
 
                 self.sendXMLHttpRequest(
-                    url,
+                    self.url + url,
                     'DELETE',
                     null,
                     resolve,
@@ -67,7 +82,7 @@ const RestHelper = {
 
             xhr.onreadystatechange = function() {
 
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status >= 200 &&  xhr.status < 300) {
                     resolve(JSON.parse(xhr.responseText));
 
                 }  else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 0) {
@@ -94,6 +109,8 @@ const RestHelper = {
 
             xhr.open(method, url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('oopsie-site-id', this.siteId);
+            xhr.setRequestHeader('oopsie-customer-id', this.customerId);
             xhr.send(item);
         }
 

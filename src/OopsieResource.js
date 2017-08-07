@@ -1,55 +1,37 @@
+import OopsieQuery from './OopsieQuery';
+import OopsieDeleteQuery from './OopsieDeleteQuery';
+import OopsieCreateQuery from './OopsieCreateQuery';
+import OopsieSaveQuery from './OopsieSaveQuery';
+
+import RestHelper from './RestHelper';
+
 class OopsieResource {
 
-    constructor(resourceName, resources, id) {
-        this.resourceName = resourceName;
-        this.id = id;
-        // Clone object.
-        this.resources = JSON.parse(JSON.stringify(resources));
-
-        this._setupGettersAndSetters(resourceName);
+    constructor(resource) {
+        this.resourceName = resource.name;
+        this.id = resource.id;
+        this.attributes = resource.attributes;
+        this.partitionKeys = resource.partitionKeys;
+        this.clusterKeys = resource.clusterKeys;
+        this.views = resource.views;
+        this.auths = resource.auths;
     }
 
-    print() {
-        var resources = this.getResources();
-        for (var key in resources) {
-            console.log(resources[key]);
-        }
-
+    create(params, callback) {
+        return new OopsieCreateQuery(this.id);
     }
 
-    _setupGettersAndSetters(resourceName) {
-
-        for (var key in this.resources) {
-            /*jslint evil: true */
-            var name = this.resources[key].name;
-            var nameOfItemWithUppercase = this._capitalizeFirstLetter(name);
-            var setter = 'set' + nameOfItemWithUppercase;
-            var getter = 'get' + nameOfItemWithUppercase;
-            this[setter] = new Function('value', 'this._addResourceValue("' + name + '", value);');
-            this[getter] = new Function('return this._getResourceValue("' + name + '");');
-        }
-
+    save(params, callback) {
+        return new OopsieSaveQuery(this.id);
     }
 
-    _capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+    delete(params, callback) {
+        return new OopsieDeleteQuery(this.id);
     }
 
-    _addResourceValue(key, value) {
-        if (this.resources[key].type === 'INTEGER') {
-            value = parseInt(value, 10);
-        }
-        this.resources[key].value = value;
+    get() {
+        return new OopsieQuery(this.id);
     }
-
-    _getResourceValue(key) {
-        return this.resources[key].value;
-    }
-
-    getResources() {
-        return this.resources;
-    }
-
 
 }
 

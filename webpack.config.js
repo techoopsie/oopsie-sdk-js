@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var path = require('path');
-var libraryName = 'Oopsie';
+var libraryName = 'oopsie';
 var outputFile = libraryName + '.js';
 
 var env = process.env.WEBPACK_ENV;
@@ -20,7 +20,7 @@ var config = {
   output: {
     path: __dirname + '/dist',
     filename: outputFile,
-    library: libraryName,
+    library: 'OopsieSite', //libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

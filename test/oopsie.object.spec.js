@@ -2,28 +2,34 @@ var sinon = require('sinon');
 var mock = require('./server.mock');
 
 //import Oopsie from './../src/index.js';
-import Oopsie from './../src/index.js';
+import OopsieSite from './../src/index.js';
 import Config from './../src/config';
 
 describe('OopsieResource should ', function() {
     'use strict';
 
-    var firstName, lastName, oopsie, server, resourceName;
+    var firstName, prodEndpoint, lastName, oopsie, server, resourceName, resourceId, appName, app, resource;
 
     beforeEach(function(done) {
 
         firstName = 'TestUser';
         lastName = 'Lastname';
-        resourceName = 'persons';
+        resourceName = 'rels';
+        appName = 'app';
+        resourceId = '45f23078-1241-4161-8c6b-f242d2974363';
 
+        var siteId = '1';
+        var customerId = '2'
+        prodEndpoint = 'http://localhost:8080/api/v1';
+        server = mock.serverMock(prodEndpoint + '/init', 'GET', mock.getMetaData());
 
-        var webResourceId = '1';
-        server = mock.serverMock(Config.url.api + webResourceId + '/meta', 'GET', mock.getMetaData());
-
-        oopsie = new Oopsie(webResourceId, function(err) {
+        oopsie = new OopsieSite(prodEndpoint, siteId, customerId);
+        oopsie.init(function(err) {
             if (err) {
                 console.err('Got an error: ' + err.message);
             }
+            app = oopsie.getApp(appName);
+            resource = app.getResource(resourceName);
             done();
         });
     });
@@ -35,99 +41,73 @@ describe('OopsieResource should ', function() {
     });
 
     it('be defined', function () {
-
-        expect(oopsie.createResource(resourceName)).toBeDefined();
-
+        expect(app).toBeDefined();
     });
 
-    it('not be added to window if not new is used', function() {
-
-        var oopsieResource = oopsie.createResource(resourceName);
-        oopsieResource.notAddedToWindow = 'test';
-        expect(window.notAddedToWindow).toBeUndefined();
-
+    it('get all resource entities', function() {
+        var url = resource.get()._getUrl();
+        expect(url).toEqual('/resources/' + resourceId);
     });
 
-    it('throw an exception if no Resource is passed to constructor.', function() {
+    it('get all resource entities with limit', function() {
+        var url = resource.get().limit(1)._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '?_limit=1');
+    });
 
-        expect(function() { oopsie.createResource(); }).toThrow(
-            new Error('OopsieResource needs an resource in the constructor.')
+    it('get all resource entities from a view', function() {
+        var url = resource.get().byView('myView')._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '/views/myView');
+    });
+
+    it('get all resource entities from a view with limit', function() {
+        var url = resource.get().byView('myView').limit(10)._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '/views/myView?_limit=10');
+    });
+
+    it('get resource by specific params', function() {
+        var url = resource.get().withParams({eid: 'some-eid'})._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '?eid=some-eid');
+    });
+
+    it('get resource by specific params and limit', function() {
+        var url = resource.get().withParams({eid: 'some-eid'}).limit(100)._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '?eid=some-eid&_limit=100');
+    });
+
+    it('get resource view by specific params', function() {
+        var url = resource.get().byView('myView').withParams({eid: 'some-eid'})._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '/views/myView?eid=some-eid');
+    });
+
+    it('get resource view by specific params and limit', function() {
+        var url = resource.get().byView('myView').withParams({eid: 'some-eid'}).limit(100)._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '/views/myView?eid=some-eid&_limit=100');
+    });
+
+    it('get resource with expandedRelations', function() {
+        var url = resource.get().expandRelations()._getUrl();
+        expect(url).toEqual('/resources/' + resourceId + '?_expandRelations=true');
+    })
+
+    it('should throw exception if trying to set a limit higher then 1000', function() {
+        expect(function() { resource.get().limit(1001) }).toThrow(
+            new Error('Limit has to be between 0-1000.')
         );
-
     });
 
-    it('not be added to window when not using new.', function() {
-
-        var oopsieResource = oopsie.createResource(resourceName);
-        oopsieResource.notAddedToWindow = false;
-        expect(window.notAddedToWindow).toBeUndefined();
-
+    it('should throw exception if trying to set a limit less then 0', function() {
+        expect(function() { resource.get().limit(-1) }).toThrow(
+            new Error('Limit has to be between 0-1000.')
+        );
     });
 
     it ('throw an exception if resource doesn\'t exist', function() {
 
         var resource = 'NotFound';
-        expect(function() { oopsie.createResource(resource); }).toThrow(
-            new Error('Resource ' + resource + ' doesnt exist in your application. '
-                 + '\n Available resources are: ' + resourceName)
+        expect(function() { app.getResource(resource); }).toThrow(
+            new Error('Resource ' + resource + ' doesn\'t exist in your application.'
+                 + '\nAvailable resources are: ' + resourceName)
         );
-
-    });
-
-    it('be able to create multiple without interfering with each other', function() {
-
-        var oopsieObject = oopsie.createResource(resourceName);
-        var secondOopsieObject = oopsie.createResource(resourceName);
-
-        oopsieObject.setFirstName(firstName);
-        expect(oopsieObject.getFirstName()).toBe(firstName);
-        expect(secondOopsieObject.getFirstName()).not.toEqual(firstName);
-
-        secondOopsieObject.test = 'test';
-        expect(secondOopsieObject.test).toBe('test');
-        expect(oopsieObject.test).toBeUndefined();
-
-    });
-
-    it('work for user as this.', function() {
-
-        var person = oopsie.createResource(resourceName);
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-
-        var myMother = oopsie.createResource(resourceName);
-        myMother.setFirstName('Anna');
-        myMother.setLastName('Andersson');
-
-    });
-
-    describe('be able to create getters and setters that should ', function() {
-
-        var oopsieObject;
-
-        beforeEach(function() {
-
-            oopsieObject = oopsie.createResource(resourceName);
-
-        });
-
-        it('be defined', function() {
-
-            expect(oopsieObject.getLastName).toBeDefined();
-            expect(oopsieObject.getFirstName).toBeDefined();
-            expect(oopsieObject.setLastName).toBeDefined();
-            expect(oopsieObject.setFirstName).toBeDefined();
-
-        });
-
-        it('be able to get a set item', function() {
-
-            oopsieObject.setFirstName(firstName);
-            oopsieObject.setLastName(lastName);
-            expect(oopsieObject.getFirstName()).toBe(firstName);
-            expect(oopsieObject.getLastName()).toBe(lastName);
-
-        });
 
     });
 
