@@ -1,4 +1,5 @@
-# Oopsie SDK
+<img src="Oopsie_logo_300dpi.png" alt="Oopsie" style="width: 200px;"/>
+
 
 JS SDK to use towards Sites created at Oopsie.
 Visit http://oopsie.io for more information.
