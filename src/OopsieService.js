@@ -21,11 +21,8 @@ class OopsieService {
             }
 
             callback(null);
-
         }, (err) => {
-            
             callback(err);
-
         });
     }
 

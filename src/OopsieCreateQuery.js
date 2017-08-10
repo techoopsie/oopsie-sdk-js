@@ -14,17 +14,11 @@ class OopsieCreateQuery {
     execute(callback) {
 
         RestHelper.post(this.url, this.params).then(response => {
-
             callback(null, response);
-
         }, (err) => {
-            
             callback(err);
-
         });
     }
-
-
 }
 
 export default OopsieCreateQuery;

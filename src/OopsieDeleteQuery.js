@@ -34,17 +34,11 @@ class OopsieDeleteQuery {
 
         this.url = this._getUrl();
         RestHelper.delete(this.url).then(response => {
-
             callback(null, response);
-
-        }, (err) => {
-            
+        }, (err) => {         
             callback(err);
-
         });
     }
-
-
 }
 
 export default OopsieDeleteQuery;

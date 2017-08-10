@@ -1,40 +1,70 @@
-# OWSJS
+# Oopsie SDK
 
-This is an repository with an JS SDK for use towards OWSAPI.
+JS SDK to use towards Sites created at Oopsie.
+Visit http://oopsie.io for more information.
 
 # Example
 
-    var oopsie = new OopsieSite(apiEndpoint, siteId, customerId);
-    oopsie.init((err) => {
+### Initialization
+
+```js
+var oopsie = new OopsieSite(apiEndpoint, siteId, customerId);
+oopsie.init((err) => {
     
-        // We are done loading meta data...
-        // Now we can use oopsie to create, get, save, delete entities.
-    });
+    // We are done loading meta data...
+    // Now we can use oopsie to create, get, save, delete entities.
+});
+```
 
-    var app = oopsie.getApp('PersonRepository');
+### Chooce Application and Resource
 
-    var personResource = app.getResource('Person');
+```js
+var app = oopsie.getApp('BookApp');
+var bookResource = app.getResource('Book');
+```
 
-    personResource.create().withParams({}).execute((err, resp) => {});
-    personResource.save().withParams({}).execute((err, resp) => {});
-    personResource.delete().withParams({}).execute((err) => {});
+### Get entities 
 
-    personResource.get().withParams({}).limit(100).execute(callback);
-    personResource.get().withParams({}).limit(100).expandRelations().execute(callback);
-    var query = personResource.get({}).byView('myView').limit(100).expandRelations().execute(callback);
-    query.nextPage(callback);
-    query.prevPage(callback);
-    query.hasNextPage();
-    query.hasPrevPage();
+```js
+bookResource.get().withParams({}).limit(100).execute(callback);
+bookResource.get().withParams({}).limit(100).expandRelations().execute(callback);
 
+// You 
+var query = bookResource.get({}).byView('myView').limit(100).expandRelations().execute(callback);
+query.nextPage(callback);
+query.prevPage(callback);
+query.hasNextPage();
+query.hasPrevPage();
+```
+
+### Create entity
+```js
+bookResource.create().withParams({}).execute((err, resp) => {});
+```
+
+### Update entity
+```js
+bookResource.save().withParams({}).execute((err, resp) => {});
+```
+
+### Delete entity
+```js
+bookResource.delete().withParams({}).execute((err) => {});
+```
+
+# Promises
+
+Oopsie SDK follows nodejs callback pattern so you can use bluebird to promisefy the functions if you rather use promises then callbacks.
 
 # Development
 
-Install NodeJs (Current node version: 2.14.7, but will probably work with later versions as well.) 
+## Prerequisite
 
-Install dependencies:
+Node and npm
 
-    npm install
+```sh
+npm install
+```
 
 ## Build dev and watch
 
