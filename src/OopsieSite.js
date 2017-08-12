@@ -1,7 +1,6 @@
 import RestHelper from './RestHelper';
 import OopsieService from './OopsieService';
 import OopsieResource from './OopsieResource';
-import Config from './config';
 
 class OopsieSite {
 
