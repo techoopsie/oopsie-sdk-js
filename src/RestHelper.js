@@ -83,7 +83,13 @@ const RestHelper = {
             xhr.onreadystatechange = function() {
 
                 if (xhr.readyState === XMLHttpRequest.DONE && xhr.status >= 200 &&  xhr.status < 300) {
-                    resolve(JSON.parse(xhr.responseText));
+                    var data = {};
+                    try {
+                        data = JSON.parse(xhr.responseText);
+                    } catch (err) {}
+
+                    resolve(data);
+                    
 
                 }  else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 0) {
 

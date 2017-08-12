@@ -11,8 +11,9 @@
     "tdd": "node ./node_modules/karma/bin/karma start karma.webpack.conf.js",
     "publish": "npm publish --access public"
   },
+  "bugs": "https://oopsie.atlassian.net/projects/OOP/",
   "author": "Techoopsie AB",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "babel": "^6.3.26",
     "babel-core": "^6.4.5",

@@ -1,8 +1,10 @@
-<img src="Oopsie_logo_300dpi.png" alt="Oopsie" style="width: 200px;"/>
+<img src="http://static1.squarespace.com/static/57ecb47344024301f57bc8fa/t/598852628419c22ddf382d9d/1502513980501/?format=1500w" alt="Oopsie" style="width: 200px;"/>
 
 
 JS SDK to use towards Sites created at Oopsie.
 Visit http://oopsie.io for more information.
+
+More documentation can be found at http://docs.techoopsie.com/
 
 # Example
 
@@ -51,6 +53,59 @@ bookResource.save().withParams({}).execute((err, resp) => {});
 ### Delete entity
 ```js
 bookResource.delete().withParams({}).execute((err) => {});
+```
+
+# Handle Users
+
+If you have auth enabled on your site you can manage Users via the SDK.
+
+### Register user
+
+To let Users register via the SDK you need to set this up in the Dashboard for your site. By default no Roles are allowed to register via the API and only the Admin for the Site can add Users in the Dashboard.
+
+```js
+var user = {
+    email: 'my@email.com',
+    password: 'my-super-secret',
+    firstname: 'Anja',
+    lastname: 'Hrabun'
+};
+oopsie.register(user, (err) => {
+    if (err) {
+        // We failed to register user.
+        alert(err.message);
+        return;
+    }
+    // User registered.
+})
+```
+
+### Login user
+```js
+var user = {
+    email: 'my@email.com',
+    password: 'my-super-secret'
+};
+oopsie.login(user, (err) => {
+    if (err) {
+        // We failed to login.
+        alert(err.message);
+        return;
+    }
+    // User logged in.
+})
+```
+
+### Logout
+```js
+oopsie.logout((err) => {
+    if (err) {
+        // We failed to logout.
+        alert(err.message);
+        return;
+    }
+    // User logged out.
+})
 ```
 
 # Promises
