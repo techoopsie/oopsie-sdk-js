@@ -115,8 +115,10 @@ const RestHelper = {
 
             xhr.open(method, url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.withCredentials = 'true';            
             xhr.setRequestHeader('oopsie-site-id', this.siteId);
             xhr.setRequestHeader('oopsie-customer-id', this.customerId);
+            xhr.setRequestHeader('Access-Control-Allow-Credentials', 'true');
             xhr.send(item);
         }
 

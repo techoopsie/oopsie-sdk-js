@@ -1,9 +1,9 @@
-import OopsieQuery from './OopsieQuery';
-import OopsieDeleteQuery from './OopsieDeleteQuery';
-import OopsieCreateQuery from './OopsieCreateQuery';
-import OopsieSaveQuery from './OopsieSaveQuery';
+import OopsieQuery from './oopsie.query.get';
+import OopsieDeleteQuery from './oopsie.query.delete';
+import OopsieCreateQuery from './oopsie.query.create';
+import OopsieSaveQuery from './oopsie.query.save';
 
-import RestHelper from './RestHelper';
+import RestHelper from './resthelper';
 
 class OopsieResource {
 

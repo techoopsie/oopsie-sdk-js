@@ -1,3 +1,3 @@
-import OopsieSite from './OopsieSite';
+import OopsieSite from './oopsie.site';
 
 export default OopsieSite

@@ -1,5 +1,5 @@
-import RestHelper from './RestHelper';
-import OopsieApp from './OopsieApp';
+import RestHelper from './resthelper';
+import OopsieApp from './oopsie.app';
 
 class OopsieService {
 

@@ -1,6 +1,6 @@
-import RestHelper from './RestHelper';
-import OopsieService from './OopsieService';
-import OopsieResource from './OopsieResource';
+import RestHelper from './resthelper';
+import OopsieService from './oopsie.service';
+import OopsieResource from './oopsie.resource';
 
 class OopsieSite {
 

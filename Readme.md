@@ -112,6 +112,14 @@ oopsie.logout((err) => {
 
 Oopsie SDK follows nodejs callback pattern so you can use bluebird to promisefy the functions if you rather use promises then callbacks.
 
+# Examples
+
+Examples can be found in the *examples* folder. Each example will be in a subfolder and include everything needed to run the example. They need a working Oopsie site to run, and we will most likely provide them for you, but you can also create your own Site in the sandbox and try the examples against your own Site.
+
+**NOTE: the examples are meant to give you a better understanding of how you can use Oopsie to store your data and handle your Users, they are not meant to be a beauty for the eye ;)**
+
+**If you can't stand the awesome design of the examples, feel free to give us a pull request**
+
 # Development
 
 ## Prerequisite

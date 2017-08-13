@@ -1,9 +1,7 @@
 var sinon = require('sinon');
 var mock = require('./server.mock');
 
-//import Oopsie from './../src/index.js';
 import OopsieSite from './../src/index.js';
-import Config from './../src/config';
 
 describe('OopsieResource should ', function() {
     'use strict';

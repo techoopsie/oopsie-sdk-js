@@ -1,4 +1,4 @@
-import RestHelper from './RestHelper';
+import RestHelper from './resthelper';
 
 class OopsieQuery {
 

@@ -1,6 +1,6 @@
-import RestHelper from './RestHelper';
+import RestHelper from './resthelper';
 
-class OopsieSaveQuery {
+class OopsieCreateQuery {
 
     constructor(resourceId) {
         this.url = '/resources/' + resourceId;
@@ -8,16 +8,12 @@ class OopsieSaveQuery {
 
     withParams(params) {
         this.params = params;
-
-        if (!this.params.eid) {
-            throw new Error('Save needs an Eid.');
-        }
         return this;
     }
 
     execute(callback) {
 
-        RestHelper.put(this.url, this.params).then(response => {
+        RestHelper.post(this.url, this.params).then(response => {
             callback(null, response);
         }, (err) => {
             callback(err);
@@ -25,4 +21,4 @@ class OopsieSaveQuery {
     }
 }
 
-export default OopsieSaveQuery;
+export default OopsieCreateQuery;

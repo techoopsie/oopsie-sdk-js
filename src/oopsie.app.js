@@ -1,4 +1,4 @@
-import OopsieResource from './OopsieResource';
+import OopsieResource from './oopsie.resource';
 
 class OopsieApp {
 
