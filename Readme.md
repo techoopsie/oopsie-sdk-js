@@ -44,7 +44,6 @@ var bookResource = app.getResource('Book');
 bookResource.get().withParams({}).limit(100).execute(callback);
 bookResource.get().withParams({}).limit(100).expandRelations().execute(callback);
 
-// You 
 var query = bookResource.get({}).byView('myView').limit(100).expandRelations().execute(callback);
 query.nextPage(callback);
 query.prevPage(callback);
