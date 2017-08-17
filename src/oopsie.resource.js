@@ -1,9 +1,7 @@
-import OopsieQuery from './oopsie.query.get';
-import OopsieDeleteQuery from './oopsie.query.delete';
-import OopsieCreateQuery from './oopsie.query.create';
-import OopsieSaveQuery from './oopsie.query.save';
-
-import RestHelper from './resthelper';
+const OopsieQuery = require('./oopsie.query.get');
+const OopsieDeleteQuery = require('./oopsie.query.delete');
+const OopsieCreateQuery = require('./oopsie.query.create');
+const OopsieSaveQuery = require('./oopsie.query.save');
 
 class OopsieResource {
 
@@ -17,15 +15,15 @@ class OopsieResource {
         this.auths = resource.auths;
     }
 
-    create(params, callback) {
+    create() {
         return new OopsieCreateQuery(this.id);
     }
 
-    save(params, callback) {
+    save() {
         return new OopsieSaveQuery(this.id);
     }
 
-    delete(params, callback) {
+    delete() {
         return new OopsieDeleteQuery(this.id);
     }
 
@@ -35,4 +33,4 @@ class OopsieResource {
 
 }
 
-export default OopsieResource;
+module.exports = OopsieResource;

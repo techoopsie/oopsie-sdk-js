@@ -1,4 +1,4 @@
-import RestHelper from './resthelper';
+const RestHelper = require('./resthelper');
 
 class OopsieSaveQuery {
 
@@ -16,13 +16,8 @@ class OopsieSaveQuery {
     }
 
     execute(callback) {
-
-        RestHelper.put(this.url, this.params).then(response => {
-            callback(null, response);
-        }, (err) => {
-            callback(err);
-        });
+        RestHelper.put(this.url, this.params, callback);
     }
 }
 
-export default OopsieSaveQuery;
+module.exports = OopsieSaveQuery;

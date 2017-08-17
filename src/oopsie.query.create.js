@@ -1,4 +1,4 @@
-import RestHelper from './resthelper';
+const RestHelper = require('./resthelper');
 
 class OopsieCreateQuery {
 
@@ -11,14 +11,10 @@ class OopsieCreateQuery {
         return this;
     }
 
-    execute(callback) {
+    execute(cb) {
 
-        RestHelper.post(this.url, this.params).then(response => {
-            callback(null, response);
-        }, (err) => {
-            callback(err);
-        });
+        RestHelper.post(this.url, this.params, cb);
     }
 }
 
-export default OopsieCreateQuery;
+module.exports = OopsieCreateQuery;

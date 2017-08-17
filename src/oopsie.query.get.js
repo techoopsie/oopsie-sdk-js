@@ -1,4 +1,4 @@
-import RestHelper from './resthelper';
+const RestHelper = require('./resthelper');
 
 class OopsieQuery {
 
@@ -69,12 +69,13 @@ class OopsieQuery {
 
     nextPage(callback) {
         var url = this.nextPageUrl.substring(RestHelper.getProdUrl().length);
-        RestHelper.get(url).then(response => {
+        RestHelper.get(url, (err, response) => {
+            if (err) {
+                return callback(err);
+            }
             this.nextPageUrl = response.metadata.nextPageUrl;
             this.prevPageUrl = response.metadata.prevPageUrl;
             callback(null, response);
-        }, (err) => {
-            callback(err);
         });
         return this;
     }
@@ -85,12 +86,13 @@ class OopsieQuery {
 
     prevPage(callback) {
         var url = this.prevPageUrl.substring(RestHelper.getProdUrl().length);
-        RestHelper.get(url).then(response => {
+        RestHelper.get(url, (err, response) => {
+            if (err) {
+                return callback(err);
+            }
             this.nextPageUrl = response.metadata.nextPageUrl;
             this.prevPageUrl = response.metadata.prevPageUrl;
             callback(null, response);
-        }, (err) => {
-            callback(err);
         });
         return this;
     }
@@ -98,12 +100,13 @@ class OopsieQuery {
     execute(callback) {
 
         this.url = this._getUrl();
-        RestHelper.get(this.url).then(response => {
+        RestHelper.get(this.url, (err, response) => {
+            if (err) {
+                return callback(err);
+            }
             this.nextPageUrl = response.metadata.nextPageUrl;
             this.prevPageUrl = response.metadata.prevPageUrl;
             callback(null, response);
-        }, (err) => {
-            callback(err);
         });
         return this;
     }
@@ -111,4 +114,4 @@ class OopsieQuery {
 
 }
 
-export default OopsieQuery;
+module.exports = OopsieQuery;

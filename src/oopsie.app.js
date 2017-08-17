@@ -1,4 +1,4 @@
-import OopsieResource from './oopsie.resource';
+const OopsieResource = require('./oopsie.resource');
 
 class OopsieApp {
 
@@ -21,4 +21,4 @@ class OopsieApp {
 
 }
 
-export default OopsieApp;
+module.exports = OopsieApp;

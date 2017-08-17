@@ -1,6 +1,5 @@
-import RestHelper from './resthelper';
-import OopsieService from './oopsie.service';
-import OopsieResource from './oopsie.resource';
+const RestHelper = require('./resthelper');
+const OopsieService = require('./oopsie.service');
 
 class OopsieSite {
 
@@ -25,42 +24,34 @@ class OopsieSite {
         return this._name;
     }
 
+    setApiKey(apiKey) {
+        this.oopsieService.setApiKey(apiKey);
+    }
+
     getApp(appName) {
         return this.oopsieService.getApp(appName);
     }
 
-    login(user, callback) {
-        return RestHelper.post('/users/login', user).then(res => {
-            callback(null, res);
-        }).catch(err => {
-            callback(err);
-        });
+    getApps() {
+        return this.oopsieService.getApps();
     }
 
-    register(user, callback) {
-        return RestHelper.post('/users/register', user).then(res => {
-            callback(null, res);
-        }).catch(err => {
-            callback(err);
-        });
+    login(user, cb) {
+        return RestHelper.post('/users/login', user, cb);
     }
 
-    logout(callback) {
-        return RestHelper.post('/users/logout').then(res => {
-            callback(null, res);
-        }).catch(err => {
-            callback(err);
-        });
+    register(user, cb) {
+        return RestHelper.post('/users/register', user, cb);
     }
 
-    refresh(callback) {
-        return RestHelper.post('/users/refresh').then(res => {
-            callback(null, res);
-        }).catch(err => {
-            callback(err);
-        });
+    logout(cb) {
+        return RestHelper.post('/users/logout', null, cb);
+    }
+
+    refresh(cb) {
+        return RestHelper.post('/users/refresh', null, cb);
     }
 
 };
 
-export default OopsieSite;
+module.exports = OopsieSite;

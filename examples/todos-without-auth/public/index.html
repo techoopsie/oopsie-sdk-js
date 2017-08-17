@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+<script src="oopsie.min.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="todos">
+        <div>
+            <h3>Todos 
+                <button style="float: right;" class="btn waves-effect waves-light" id="logoutBtn">Logout
+                    <i class="material-icons right">power_settings_new</i>
+                </button>
+            </h3>
+            
+        </div>
+        <table id="thetable">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Done</th>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        <button class="btn waves-effect waves-light" id="prevPage">
+            <i class="material-icons left">fast_rewind</i>
+        </button>
+        <button class="btn waves-effect waves-light" style="float:right;" id="nextPage">
+            <i class="material-icons right">fast_forward</i>
+        </button>
+
+        <h3>Create todo</h3>
+
+        <div class="row">
+            <form class="col s12" id="createTodoForm">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="name" type="text" name="name" class="validate">
+                        <label for="name">Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="description" type="text" name="description" class="validate">
+                        <label for="description">Description</label>
+                    </div>
+                </div>
+                <button class="btn waves-effect waves-light" form="createTodoForm" type="submit" name="action">Create
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

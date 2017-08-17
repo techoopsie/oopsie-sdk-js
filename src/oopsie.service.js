@@ -1,5 +1,5 @@
-import RestHelper from './resthelper';
-import OopsieApp from './oopsie.app';
+const RestHelper = require('./resthelper');
+const OopsieApp = require('./oopsie.app');
 
 class OopsieService {
 
@@ -14,21 +14,28 @@ class OopsieService {
     }
 
     init(callback) {
-        RestHelper.get('/init').then((apps) => {
-
+        RestHelper.get('/init', (err, apps) => {
+            if (err) {
+                return callback(err);
+            }
             for(var key in apps) {
                 this.apps[key] = new OopsieApp(key, apps[key]);
             }
-
             callback(null);
-        }, (err) => {
-            callback(err);
         });
+    }
+
+    setApiKey(apiKey) {
+        RestHelper.setApiKey(apiKey);
     }
 
     getApp(appName) {
         return this.apps[appName];
     }
+
+    getApps() {
+        return this.apps;
+    }
 };
 
-export default OopsieService;
+module.exports = OopsieService;

@@ -1,4 +1,4 @@
-import RestHelper from './resthelper';
+const RestHelper = require('./resthelper');
 
 class OopsieDeleteQuery {
 
@@ -33,12 +33,8 @@ class OopsieDeleteQuery {
     execute(callback) {
 
         this.url = this._getUrl();
-        RestHelper.delete(this.url).then(response => {
-            callback(null, response);
-        }, (err) => {         
-            callback(err);
-        });
+        RestHelper.delete(this.url, callback);
     }
 }
 
-export default OopsieDeleteQuery;
+module.exports = OopsieDeleteQuery;

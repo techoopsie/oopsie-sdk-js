@@ -2,10 +2,8 @@
 var siteId = "6a4a3a28-23af-4693-a5fb-ab93bca9c803";
 var customerId = "fefa1dbf-5f6d-4d38-aac1-1298fa80d4cf";
 var todos = [];
-var rps = 0;
-var pages = {};
 var apiUrl = 'http://oopsie-dev.techoopsie.com/api/api/v1';
-apiUrl = 'http://localhost:8080/api/v1';
+//apiUrl = 'http://localhost:8080/api/v1';
 
 var oopsieSite = new OopsieSite(apiUrl, siteId, customerId);
 
@@ -15,7 +13,9 @@ oopsieSite.init(err => {
         Materialize.toast("Failed: Please contact admin.", 4000);
         return;
     }
-    todoResource = oopsieSite.getApp('TodoApp').getResource('Todo');
+    // Shouldn't be used in browser, should be kept secret.
+    oopsieSite.setApiKey('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjMzJlZjY5MS0xODQyLTQ4ZDMtODI0ZS1iNDNhN2ZjYjkxNzEiLCJkZXNjciI6IlRvZG8iLCJzaXRlIjoiNmE0YTNhMjgtMjNhZi00NjkzLWE1ZmItYWI5M2JjYTljODAzIiwiaXNzIjoiZmVmYTFkYmYtNWY2ZC00ZDM4LWFhYzEtMTI5OGZhODBkNGNmIiwidHlwZSI6ImFwaUtleSIsImlhdCI6MTUwMjk4NzU2NSwianRpIjoiYzMyZWY2OTEtMTg0Mi00OGQzLTgyNGUtYjQzYTdmY2I5MTcxIn0.0Hfch2uIO9KHNlBb2tK4zBtTCZXwRGk5zkqMeMcoAFo');
+    todoResource = oopsieSite.getApp('TodoAppWithoutAuth').getResource('Todo');
     getTodos();
 });
 
@@ -30,60 +30,10 @@ function getTodos() {
         }
         showNextPage(query);
         showPrevPage(query);
-        pages = result.metadata.pages;
         todos = result.entities;
         fillTodoTable(todos);
     });
 }
-
-function login(event) {
-    event.preventDefault();
-    var $inputs = $('#loginForm :input');
-    var values = {};
-    $inputs.each(function() {
-        values[this.name] = $(this).val();
-    });
-
-    oopsieSite.login(values, (err, res) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-
-        showTodos();
-    });
-}
-
-function register(event) {
-    event.preventDefault();
-    var $inputs = $('#registerForm :input');
-    var values = {};
-    $inputs.each(function() {
-        values[this.name] = $(this).val();
-    });
-    values.firstname='asd';
-    values.lastname='asd';    
-    values.authz = ['User'];
-
-    oopsieSite.register(values, (err, res) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        showLogin();
-    });
-}
-
-function logout(event) {
-    oopsieSite.logout(err => {
-        if (err) {
-            Materialize.toast(err.message, 4000);
-            return;
-        }
-        showLogin();
-    });
-}
-
 
 function fillTodoTable(todos) {
     $('#thetable tr').not(':first').not(':last').remove();
@@ -102,7 +52,6 @@ function nextPage(event) {
     query.nextPage((err, result) => {
         showNextPage(query);
         showPrevPage(query);
-        pages = result.metadata;
         todos = result.entities;
         fillTodoTable(todos);
     });
@@ -114,7 +63,6 @@ function prevPage(event) {
     query.prevPage((err, result) => {
         showNextPage(query);
         showPrevPage(query);
-        pages = result.metadata;
         todos = result.entities;
         fillTodoTable(todos);
     });
@@ -140,15 +88,8 @@ function showNextPage(query) {
 $(document).ready(function() {
     $('select').material_select();
     $("#createTodoForm").on('submit', createTodo);
-    $("#loginForm").on('submit', login);
-    $("#registerForm").on('submit', register);
     $("#nextPage").on('click', nextPage);
     $("#prevPage").on('click', prevPage);
-
-    $("#registerLink").on('click', showRegister);
-    $("#logoutBtn").on('click', logout);
-    $("#login").hide();
-    $("#register").hide();
 });
 
 
@@ -171,23 +112,4 @@ function createTodo(event) {
         fillTodoTable(todos);
         Materialize.toast('Created Todo', 4000);
     });
-}
-
-function showLogin() {
-    $("#todos").hide();
-    $("#register").hide();
-    $("#login").show();
-}
-
-function showRegister() {
-    $("#todos").hide();
-    $("#login").hide();
-    $("#register").show();
-}
-
-function showTodos() {
-    getTodos();
-    $("#login").hide();
-    $("#register").hide();
-    $("#todos").show();
 }

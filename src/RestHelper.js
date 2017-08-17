@@ -1,4 +1,4 @@
-import { Promise } from 'es6-promise';
+const request = require('request');
 
 const RestHelper = {
 
@@ -12,62 +12,34 @@ const RestHelper = {
 
         setCustomerId: function(customerId) {
             this.customerId = customerId;
+            this.headers['oopsie-customer-id'] = customerId;
         },
 
         setSiteId: function(siteId) {
             this.siteId = siteId;
+            this.headers = this.headers || {};
+            this.headers['oopsie-site-id'] = siteId;
         },
 
-        get: function(url) {
+        setApiKey: function(apiKey) {
+            this.apiKey = apiKey;
+            this.headers['Authorization'] = apiKey;
+        },
 
-            var self = this;
-
-            return new Promise(function(resolve, reject) {
-
-                self.sendXMLHttpRequest(
-                    self.url + url,
-                    'GET',
-                    null,
-                    resolve,
-                    reject
-                );
-
-            });
+        get: function(url, cb) {
+            return this.send(this.url + url, 'GET', null, cb);
     	},
 
-        post: function(url, item) {
-
-            var self = this;
-
-            return new Promise(function(resolve, reject) {
-
-                self.sendXMLHttpRequest(
-                    self.url + url,
-                    'POST',
-                    JSON.stringify(item),
-                    resolve,
-                    reject
-                );
-
-            });
+        post: function(url, item, cb) {
+            return this.send(this.url + url, 'POST', item, cb);
         },
 
-        delete: function(url) {
+        put: function(url, item, cb) {
+            return this.send(this.url + url, 'PUT', item, cb);
+        },
 
-            var self = this;
-
-            return new Promise(function(resolve, reject) {
-
-                self.sendXMLHttpRequest(
-                    self.url + url,
-                    'DELETE',
-                    null,
-                    resolve,
-                    reject
-                );
-
-            });
-
+        delete: function(url, cb) {
+            return this.send(this.url + url, 'DELETE', null, cb);
         },
 
         appendFirstSlash: function(url) {
@@ -77,51 +49,32 @@ const RestHelper = {
             return url;
         },
 
-        sendXMLHttpRequest: function(url, method, item, resolve, reject) {
-            var xhr = new XMLHttpRequest();
-
-            xhr.onreadystatechange = function() {
-
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status >= 200 &&  xhr.status < 300) {
-                    var data = {};
-                    try {
-                        data = JSON.parse(xhr.responseText);
-                    } catch (err) {}
-
-                    resolve(data);
-                    
-
-                }  else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 0) {
-
-                    var err = {
-                        message: 'Unknown Error Occured. Server response not received.',
-                        status: xhr.status
-                    };
-
-                    reject(err);
-
-                } else if (xhr.readyState === XMLHttpRequest.DONE) {
-
-                    var err = {
-                        message: xhr.responseText === '' ? 'No error message' : JSON.parse(xhr.responseText),
-                        status: xhr.status
-                    };
-
-                    reject(err);
-
-                }
-
+        send: function(url, method, item, cb) {
+            let options = {
+                url: url,
+                method: method,
+                headers: this.headers,
+                withCredentials: true,
+                json: true
             };
+            if (item) {
+                options.body = item;
+                
+            }
+            request(options, function (error, response, body) {
+                if (response.statusCode >= 400) {
+                    var err = {
+                        message: body === '' ? 'No error message' : body.message,
+                        status: response.statusCode
+                    };
 
-            xhr.open(method, url, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.withCredentials = 'true';            
-            xhr.setRequestHeader('oopsie-site-id', this.siteId);
-            xhr.setRequestHeader('oopsie-customer-id', this.customerId);
-            xhr.setRequestHeader('Access-Control-Allow-Credentials', 'true');
-            xhr.send(item);
+                    cb(err);
+                    return;
+                }
+                cb(null, body);
+            });
+            
         }
-
 }
 
-export default RestHelper;
+module.exports = RestHelper;

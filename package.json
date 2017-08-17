@@ -3,7 +3,7 @@
   "version": "0.0.5",
   "description": "Javascript SDK for Oopsie",
   "homepage": "http://www.oopsie.io/",
-  "main": "dist/oopsie.min.js",
+  "main": "src/index.js",
   "scripts": {
     "dev": "cross-env WEBPACK_ENV=dev webpack --progress --colors --watch",
     "build": "cross-env WEBPACK_ENV=build webpack",
@@ -22,7 +22,6 @@
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-preset-es2015": "^6.3.13",
     "cross-env": "^1.0.7",
-    "es6-promise": "^3.0.2",
     "eslint": "^1.10.3",
     "eslint-loader": "^1.2.1",
     "express": "^4.15.3",
@@ -32,6 +31,7 @@
     "jasmine-core": "^2.4.1",
     "jasmine-reporters": "^2.1.1",
     "jshint": "^2.9.1",
+    "json-loader": "^0.5.7",
     "karma": "^0.13.19",
     "karma-chrome-launcher": "^0.2.2",
     "karma-coverage": "^0.5.3",
@@ -45,5 +45,9 @@
     "phantomjs": "^2.1.3",
     "sinon": "sinonjs/sinon",
     "webpack": "^1.12.13"
+  },
+  "dependencies": {
+    "request": "^2.81.0",
+    "xhr": "^2.4.0"
   }
 }

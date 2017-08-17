@@ -1,3 +1,3 @@
-import OopsieSite from './oopsie.site';
+const OopsieSite = require('./oopsie.site');
 
-export default OopsieSite
+module.exports = OopsieSite

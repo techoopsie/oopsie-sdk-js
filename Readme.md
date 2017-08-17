@@ -6,6 +6,18 @@ Visit http://oopsie.io for more information.
 
 More documentation can be found at http://docs.techoopsie.com/
 
+This SDK works both for node application and browsers applications.
+
+# Installation
+
+### npm
+
+```npm install @techoopsie/oopsie```
+
+### Script tag
+
+```To be uploaded...``` 
+
 # Example
 
 ### Initialization
@@ -53,6 +65,25 @@ bookResource.save().withParams({}).execute((err, resp) => {});
 ### Delete entity
 ```js
 bookResource.delete().withParams({}).execute((err) => {});
+```
+
+# Api key
+
+If you are using auth on your Site, you can create Api Keys to protect your data.
+You can use it in the JS SDK as below, but be carefull, you shouldn't do this in the frontend.
+If you do put it in the frontend, be sure it's not any secret data you want to protect.
+For example, you may put a read only Api Key in the frontend because you want anyone to be able to read your data, 
+but you create data in your backend where you use another Api key with read permissions.
+
+```js
+var oopsie = new OopsieSite(apiEndpoint, siteId, customerId);
+oopsie.init((err) => {
+    
+    // We are done loading meta data...
+    // Now we can use oopsie to create, get, save, delete entities.
+    var apiKey = 'api-key-from-dashboard'; 
+    oopsie.setApiKey(apiKey);
+});
 ```
 
 # Handle Users
