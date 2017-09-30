@@ -59,17 +59,20 @@ const RestHelper = {
             };
             if (item) {
                 options.body = item;
-                
             }
             request(options, function (error, response, body) {
+                if (!cb) {
+                    return;
+                }
+                if (error) {
+                    return cb(error);
+                }
                 if (response.statusCode >= 400) {
                     var err = {
                         message: body === '' ? 'No error message' : body.message,
                         status: response.statusCode
                     };
-
-                    cb(err);
-                    return;
+                    return cb(err);
                 }
                 cb(null, body);
             });

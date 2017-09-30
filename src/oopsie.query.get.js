@@ -3,7 +3,7 @@ const RestHelper = require('./resthelper');
 class OopsieQuery {
 
     constructor(resourceId) {
-        this.url = '/resources/' + resourceId;
+        this.url = '/api/v1/resources/' + resourceId;
         this.limitBy = -1;
         this.view = null;
         this._expandRelations = false;

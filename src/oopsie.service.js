@@ -14,7 +14,7 @@ class OopsieService {
     }
 
     init(callback) {
-        RestHelper.get('/init', (err, apps) => {
+        RestHelper.get('/api/v1/init', (err, apps) => {
             if (err) {
                 return callback(err);
             }

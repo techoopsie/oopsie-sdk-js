@@ -16,7 +16,21 @@ This SDK works both for node application and browsers applications.
 
 ### Script tag
 
-```To be uploaded...``` 
+To get latest:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@techoopsie/oopsie/dist/oopsie.min.js"></script>
+``` 
+
+Or to get a specific version:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@techoopsie/oopsie@<version>/dist/oopsie.min.js"></script>
+
+<!-- For example -->
+<script src="https://cdn.jsdelivr.net/npm/@techoopsie/oopsie@0.0.6/dist/oopsie.min.js"></script>
+```
+
 
 # Example
 
