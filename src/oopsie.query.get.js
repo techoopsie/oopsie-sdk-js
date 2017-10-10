@@ -7,6 +7,7 @@ class OopsieQuery {
         this.limitBy = -1;
         this.view = null;
         this._expandRelations = false;
+        this._audit = false;
     }
 
     byView(view) {
@@ -17,6 +18,10 @@ class OopsieQuery {
     withParams(params) {
         this.params = params;
         return this;
+    }
+
+    withAudit() {
+        this._audit = true;
     }
 
     limit(limit) {
@@ -50,6 +55,10 @@ class OopsieQuery {
 
         if (this._expandRelations) {
             this._addQueryParam('_expandRelations', true);
+        }
+
+        if (this._audit) {
+            this._addQueryParam('_audit', true);
         }
 
         return this.url;
