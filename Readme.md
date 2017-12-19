@@ -32,6 +32,19 @@ Or to get a specific version:
 ```
 
 
+### Webpack
+
+If you are using webpack you might need to add 
+
+```
+node: {
+    fs: "empty"
+}
+```
+
+to your webpack.config.js
+
+
 # Example
 
 ### Initialization
@@ -58,7 +71,11 @@ var bookResource = app.getResource('Book');
 bookResource.get().withParams({}).limit(100).execute(callback);
 bookResource.get().withParams({}).limit(100).expandRelations().execute(callback);
 
-var query = bookResource.get({}).byView('myView').limit(100).expandRelations().execute(callback);
+
+// Get data from a View. 
+var query = bookResource.get().byView('myView').withParams({example: 'test'}).limit(100).expandRelations().execute(callback);
+
+
 query.nextPage(callback);
 query.prevPage(callback);
 query.hasNextPage();
