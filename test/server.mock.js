@@ -63,27 +63,31 @@ var mock = {
                                 "id": "e452e120-dad0-47fe-a6a6-6c8648d6b225"
                             }   
                         ],
-                        "partitionKeys": [],
-                        "clusterKeys": [
-                        {
-                            "name": "eid",
-                            "type": "UUID",
-                            "relation": null,
-                            "id": null
-                        }
+                        "views": [
+                            {   
+                                "name": "default",
+                                "isPrimary": true,
+                                "partitionKeys": [],
+                                "clusterKeys": [
+                                    {
+                                        "name": "eid",
+                                        "type": "UUID",
+                                        "id": 'id'
+                                    }
+                                ],
+                            }
                         ],
-                        "views": [],
                         "auths": [
-                        {
-                            "i": "b309b59f-b3a7-488e-ab40-ff1c088e1da0",
-                            "n": "Admin",
-                            "p": "READ_ALL_WRITE_ALL"
-                        },
-                        {
-                            "i": "f45e7bb8-8a66-4746-b0c7-31ad7fd1fcb8",
-                            "n": "User",
-                            "p": "NONE"
-                        }
+                            {
+                                "i": "b309b59f-b3a7-488e-ab40-ff1c088e1da0",
+                                "n": "Admin",
+                                "p": "READ_ALL_WRITE_ALL"
+                            },
+                            {
+                                "i": "f45e7bb8-8a66-4746-b0c7-31ad7fd1fcb8",
+                                "n": "User",
+                                "p": "NONE"
+                            }
                         ]
                     }
                 ]

@@ -10,8 +10,6 @@ class OopsieResource {
         this.resourceName = resource.name;
         this.id = resource.id;
         this.attributes = resource.attributes;
-        this.partitionKeys = resource.partitionKeys;
-        this.clusterKeys = resource.clusterKeys;
         this.views = resource.views;
         this.auths = resource.auths;
         this.authEnabled = resource.authEnabled;
