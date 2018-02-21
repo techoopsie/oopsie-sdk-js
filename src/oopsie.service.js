@@ -36,6 +36,10 @@ class OopsieService {
     getApps() {
         return this.apps;
     }
+
+    _getRestHelper() {
+        return RestHelper;
+    }
 };
 
 module.exports = OopsieService;

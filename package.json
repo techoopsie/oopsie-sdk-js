@@ -28,8 +28,8 @@
     "express": "^4.15.3",
     "isparta-loader": "^2.0.0",
     "istanbul-instrumenter-loader": "^0.1.3",
-    "jasmine": "^2.4.1",
-    "jasmine-core": "^2.4.1",
+    "jasmine": "^2.8.0",
+    "jasmine-core": "^2.8.0",
     "jasmine-reporters": "^2.1.1",
     "jshint": "^2.9.1",
     "json-loader": "^0.5.7",
@@ -41,10 +41,11 @@
     "karma-jasmine": "^0.3.6",
     "karma-junit-reporter": "^0.3.8",
     "karma-phantomjs-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
     "karma-spec-reporter": "0.0.23",
     "karma-webpack": "^1.7.0",
     "phantomjs": "^2.1.3",
-    "sinon": "sinonjs/sinon",
+    "sinon": "github:sinonjs/sinon",
     "webpack": "^1.12.13"
   },
   "dependencies": {

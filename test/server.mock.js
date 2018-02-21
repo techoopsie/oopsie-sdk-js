@@ -132,14 +132,11 @@ var mock = {
                 data === undefined ? '' : JSON.stringify(data)
             ]
         );
+
         server.respondImmediately = true;
         this.servers.push(server);
         return server;
-
     }
-
-
-
 };
 
 module.exports = mock;

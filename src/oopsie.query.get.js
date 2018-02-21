@@ -1,10 +1,10 @@
 const RestHelper = require('./resthelper');
+const OopsieQuery = require('./oopsie.query');
 
-class OopsieQuery {
+class OopsieGetQuery extends OopsieQuery {
 
     constructor(resourceId) {
-        this.url = '/api/v1/resources/' + resourceId;
-        this.limitBy = -1;
+        super(resourceId);
         this.view = null;
         this._expandRelations = false;
         this._audit = false;
@@ -15,61 +15,12 @@ class OopsieQuery {
         return this;
     }
 
-    withParams(params) {
-        this.params = params;
-        return this;
-    }
-
-    withAudit() {
-        this._audit = true;
-    }
-
     limit(limit) {
         if (limit < 0 || limit > 1000) {
             throw new Error('Limit has to be between 0-1000.');
         }
         this.limitBy = limit;
         return this;
-    }
-
-    expandRelations() {
-        this._expandRelations = true;
-        return this;
-    }
-
-    _getUrl() {
-
-        if (this.view) {
-            this.url += '/views/' + this.view;
-        }
-
-        for (var key in this.params) {
-            if (this.params.hasOwnProperty(key)) {
-                this._addQueryParam(key, this.params[key]);
-            }
-        }
-
-        if (this.limitBy !== -1) {
-            this._addQueryParam('_limit', this.limitBy);
-        }
-
-        if (this._expandRelations) {
-            this._addQueryParam('_expandRelations', true);
-        }
-
-        if (this._audit) {
-            this._addQueryParam('_audit', true);
-        }
-
-        return this.url;
-    }
-
-    _addQueryParam(key, value) {
-        if (this.url.indexOf('?') === -1) {
-            this.url += '?' + key + '=' + value;
-        } else {
-            this.url += '&' + key + '=' + value;
-        }
     }
 
     hasNextPage() {
@@ -108,8 +59,7 @@ class OopsieQuery {
 
     execute(callback) {
 
-        this.url = this._getUrl();
-        RestHelper.get(this.url, (err, response) => {
+        RestHelper.get(this._getUrl(), (err, response) => {
             if (err) {
                 return callback(err);
             }
@@ -119,8 +69,6 @@ class OopsieQuery {
         });
         return this;
     }
-
-
 }
 
-module.exports = OopsieQuery;
+module.exports = OopsieGetQuery;

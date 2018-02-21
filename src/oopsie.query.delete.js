@@ -1,39 +1,14 @@
 const RestHelper = require('./resthelper');
+const OopsieQuery = require('./oopsie.query');
 
-class OopsieDeleteQuery {
+class OopsieDeleteQuery extends OopsieQuery {
 
     constructor(resourceId) {
-        this.url = '/api/v1/resources/' + resourceId;
-    }
-
-    withParams(params) {
-        this.params = params;
-        return this;
-    }
-
-    _getUrl() {
-
-        for (var key in this.params) {
-            if (this.params.hasOwnProperty(key)) {
-                this._addQueryParam(key, this.params[key]);
-            }
-        }
-
-        return this.url;
-    }
-
-    _addQueryParam(key, value) {
-        if (this.url.indexOf('?') === -1) {
-            this.url += '?' + key + '=' + value;
-        } else {
-            this.url += '&' + key + '=' + value;
-        }
+        super(resourceId);
     }
 
     execute(callback) {
-
-        this.url = this._getUrl();
-        RestHelper.delete(this.url, callback);
+        RestHelper.delete(this._getUrl(), callback);
     }
 }
 

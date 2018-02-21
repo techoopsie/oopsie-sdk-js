@@ -1,29 +1,21 @@
 // Karma configuration
 var webpack = require('karma-webpack');
-var webpackConfig = require('./webpack.config.js');
 var path = require('path');
 var env = process.env.WEBPACK_ENV;
 
 var browsers = [];
-
 if (env === 'CI') {
-
     browsers.push('PhantomJS');
-
 } else  {
-
     browsers.push('PhantomJS');
-    //browsers.push('Chrome');
+    browsers.push('Chrome');
     //browsers.push('IEEdge');
-
 }
 
 
 module.exports = function(config) {
   'use strict';
   config.set({
-
-
     frameworks: ['jasmine'],
     basePath: '',
   	reporters: ['spec', 'junit', 'coverage'],
@@ -35,38 +27,53 @@ module.exports = function(config) {
     captureTimeout: 60000,
     singleRun: false,
 
-
       // list of files / patterns to load in the browser
   	files: [
-      'test/**/*.spec.js'
+      'test/index.test.js'
   	],
 
 
     webpack: {
-        module: {
-          loaders: [
-              // transpile all files except testing sources with babel as usual
-                {
-                    test: /\.js$/,
-                    exclude: [
-                        path.resolve('node_modules/'),
-                        path.resolve('dist/')
-                    ],
-                    loader: 'babel'
-                },
+      devtool: 'inline-source-map',
+      module: {
+        loaders: [
+          // transpile all files except testing sources with babel as usual
+          {
+            test: /\.js$/,
+            exclude: [
+                path.resolve('node_modules/'),
+                path.resolve('dist/')
             ],
-            postLoaders: [
-                // transpile and instrument only testing sources with isparta
-                {
-                    test: /\.(js|jsx)$/,
-                    exclude: /(node_modules|bower_components|test|dist)/,
-                    loader: 'istanbul-instrumenter'
-                }
+            loader: 'babel'
+          },
+          {
+            test: /\.json$/,
+            loader: 'json-loader'
+          }
+        ],
+        postLoaders: [
+          // transpile and instrument only testing sources with isparta
+          {
+            test: /\.(js|jsx)$/,
+            exclude: /(node_modules|bower_components|test|dist)/,
+            loader: 'istanbul-instrumenter'
+          }
 
-          ]
+        ]
       },
-       watch:true,
-       stats: {
+      resolve: {
+        root: path.resolve('./src'),
+        extensions: ['', '.js'],
+        alias: {
+          "request$": "xhr"
+        }
+      },
+      entry: './test/index.test.js',
+      output: {
+        filename: 'bundle.js'
+      },
+      watch:true,
+      stats: {
         assets: false,
         colors: true,
         children: false,
@@ -80,7 +87,7 @@ module.exports = function(config) {
 
     preprocessors: {
       'src/**/*.js': [ 'webpack', 'coverage' ],
-      'test/**/*.spec.js': [ 'webpack' ]
+      'test/index.test.js': [ 'webpack', 'sourcemap' ]
     },
 
 
@@ -103,8 +110,12 @@ module.exports = function(config) {
       }
     },
 
+    client: {
+      captureConsole: true
+    },
+
     plugins: [
-        webpack,
+      webpack,
   		'karma-*'
   	]
 

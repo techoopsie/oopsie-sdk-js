@@ -14,10 +14,10 @@ class OopsieSite {
         this.siteId = siteId;
         this.prodEndpoint = prodEndpoint;
         this.customerId = customerId;
+        this.oopsieService = new OopsieService(this.prodEndpoint, this.siteId, this.customerId);
     }
 
     init(callback) {
-        this.oopsieService = new OopsieService(this.prodEndpoint, this.siteId, this.customerId);
         this.oopsieService.init(err => {
             callback(err, this);
         });
@@ -37,6 +37,22 @@ class OopsieSite {
 
     getApps() {
         return this.oopsieService.getApps();
+    }
+
+    me(cb) {
+        return RestHelper.get('/api/v1/users/me', cb);
+    }
+
+    isLoggedIn(cb) {
+        return this.me((err, resp) => {
+
+            if (err && err.status === 401) {
+                return cb(null, false);
+            } else if (err) {
+                return cb(err, false);
+            }
+            cb(null, true);
+        });
     }
 
     login(user, cb) {

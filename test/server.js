@@ -13,4 +13,17 @@ app.use(nocache);
 
 app.use(express.static('public'))
 app.use(express.static('../dist'))
-app.listen(3001);
+
+function startServer() {
+  app.listen(3001, () => {
+    console.log('Listening to 3001');
+  });
+  return app;
+}
+
+
+if (require.main === module) {
+    startServer();
+}
+
+module.exports = startServer;

@@ -52,7 +52,6 @@ to your webpack.config.js
 ```js
 var oopsie = new OopsieSite(apiEndpoint, siteId, customerId);
 oopsie.init((err) => {
-    
     // We are done loading meta data...
     // Now we can use oopsie to create, get, save, delete entities.
 });
@@ -71,16 +70,27 @@ var bookResource = app.getResource('Book');
 bookResource.get().withParams({}).limit(100).execute(callback);
 bookResource.get().withParams({}).limit(100).expandRelations().execute(callback);
 
-
 // Get data from a View. 
 var query = bookResource.get().byView('myView').withParams({example: 'test'}).limit(100).expandRelations().execute(callback);
-
 
 query.nextPage(callback);
 query.prevPage(callback);
 query.hasNextPage();
 query.hasPrevPage();
 ```
+
+It is possible to query partition/clustering keys by using greater or equal then (gte) or less or equal then (lte).
+To do so, the syntax is:
+```js
+// Here "key" is a partition or a cluster key on your Resource.
+
+// Greater or equal then
+bookResource.get().withParams({'key>': 'myKey'}).execute();
+// Less or equal then
+bookResource.get().withParams({'key<': 'myKey'}).execute();
+```
+
+
 
 ### Create entity
 ```js
@@ -167,6 +177,30 @@ oopsie.logout((err) => {
     }
     // User logged out.
 })
+```
+
+### Me
+```js
+oopsie.me((err, me) => {
+    if (err) {
+        // We failed to get me.
+        return alert(err.message);
+    }
+    console.log(me); // {email: 'test@example.com', id: 'id-of-user', auths: []}
+})
+```
+
+### isLoggedIn
+
+This is basically a wrapper around the "oopsie.me()" function, but it returns a boolean to easier verify if user is logged in or not.
+```js
+oopsie.isLoggedIn((err, loggedIn) => {
+    if (err) {
+        // We failed check if logged in, something went wrong.
+        return alert(err.message);
+    }
+    console.log(loggedIn); // True if user is logged in, false otherwise.
+});
 ```
 
 # Promises

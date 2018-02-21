@@ -1,16 +1,17 @@
 const RestHelper = require('./resthelper');
+const OopsieQuery = require('./oopsie.query');
 
-class OopsieSaveQuery {
+class OopsieSaveQuery extends OopsieQuery {
 
     constructor(resourceId) {
-        this.url = '/api/v1/resources/' + resourceId;
+        super(resourceId);
     }
 
     withParams(params) {
         this.params = params;
 
-        if (!this.params.eid) {
-            throw new Error('Save needs an Eid.');
+        if (!this.params.id) {
+            throw new Error('Save needs an id. Batch update not supported yet.');
         }
         return this;
     }

@@ -6,6 +6,7 @@ const OopsieSaveQuery = require('./oopsie.query.save');
 class OopsieResource {
 
     constructor(resource) {
+       
         this.resourceName = resource.name;
         this.id = resource.id;
         this.attributes = resource.attributes;
@@ -13,6 +14,14 @@ class OopsieResource {
         this.clusterKeys = resource.clusterKeys;
         this.views = resource.views;
         this.auths = resource.auths;
+        this.authEnabled = resource.authEnabled;
+
+         // Make sure you can always get the full init object.
+        this._resource = resource;
+    }
+
+    hasAuthEnabled() {
+        return this.authEnabled;
     }
 
     create() {
