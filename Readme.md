@@ -28,7 +28,7 @@ Or to get a specific version:
 <script src="https://cdn.jsdelivr.net/npm/@techoopsie/oopsie@<version>/dist/oopsie.min.js"></script>
 
 <!-- For example -->
-<script src="https://cdn.jsdelivr.net/npm/@techoopsie/oopsie@0.0.6/dist/oopsie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@techoopsie/oopsie@0.0.9/dist/oopsie.min.js"></script>
 ```
 
 
