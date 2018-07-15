@@ -68,10 +68,9 @@ var bookResource = app.getResource('Book');
 
 ```js
 bookResource.get().withParams({}).limit(100).execute(callback);
-bookResource.get().withParams({}).limit(100).expandRelations().execute(callback);
 
 // Get data from a View. 
-var query = bookResource.get().byView('myView').withParams({example: 'test'}).limit(100).expandRelations().execute(callback);
+var query = bookResource.get().byView('myView').withParams({example: 'test'}).limit(100).execute(callback);
 
 query.nextPage(callback);
 query.prevPage(callback);

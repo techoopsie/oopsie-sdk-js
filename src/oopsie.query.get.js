@@ -6,7 +6,6 @@ class OopsieGetQuery extends OopsieQuery {
     constructor(resourceId) {
         super(resourceId);
         this.view = null;
-        this._expandRelations = false;
         this._audit = false;
     }
 
