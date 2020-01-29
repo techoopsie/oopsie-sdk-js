@@ -9,13 +9,7 @@ class OopsieCreateQuery extends OopsieQuery {
     }
 
     execute(cb) {
-        if(this.type === 'ENTITY') {
-            RestHelper.post(this.url, this.params, cb);
-        } else if(this.type === 'BINARY') {
-            console.log('POST BINARY');
-            console.log(this.url);
-            console.log(this.params);
-        }
+        RestHelper.post(this.url, this.params, cb);
     }
 }
 
