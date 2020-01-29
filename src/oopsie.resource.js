@@ -13,7 +13,7 @@ class OopsieResource {
         this.views = resource.views;
         this.auths = resource.auths;
         this.authEnabled = resource.authEnabled;
-
+        console.log(resource)
          // Make sure you can always get the full init object.
         this._resource = resource;
     }
