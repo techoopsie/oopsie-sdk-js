@@ -3,9 +3,8 @@ const OopsieQuery = require('./oopsie.query');
 
 class OopsieCreateQuery extends OopsieQuery {
 
-    constructor(resourceId, type) {
+    constructor(resourceId) {
         super(resourceId);
-        this.type = type;
     }
 
     execute(cb) {

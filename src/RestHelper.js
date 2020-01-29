@@ -70,7 +70,7 @@ const RestHelper = {
             }
             if (response.statusCode >= 400) {
                 var err = {
-                    message: (body == undefined || body === '') ? 'No error message' : body.message,
+                    message: (body === undefined || body === '') ? 'No error message' : body.message,
                     status: response.statusCode
                 };
                 return cb(err);

@@ -13,7 +13,6 @@ class OopsieResource {
         this.views = resource.views;
         this.auths = resource.auths;
         this.authEnabled = resource.authEnabled;
-        this.type = resource.type;
          // Make sure you can always get the full init object.
         this._resource = resource;
     }
@@ -23,7 +22,7 @@ class OopsieResource {
     }
 
     create() {
-        return new OopsieCreateQuery(this.id, this.type);
+        return new OopsieCreateQuery(this.id);
     }
 
     save() {
