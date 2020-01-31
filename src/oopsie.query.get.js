@@ -62,8 +62,11 @@ class OopsieGetQuery extends OopsieQuery {
             if (err) {
                 return callback(err);
             }
-            this.nextPageUrl = response.metadata.nextPageUrl;
-            this.prevPageUrl = response.metadata.prevPageUrl;
+            
+            if(response.metadata) {
+                this.nextPageUrl = response.metadata.nextPageUrl;
+                this.prevPageUrl = response.metadata.prevPageUrl;
+            }
             callback(null, response);
         });
         return this;
