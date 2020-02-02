@@ -34,7 +34,7 @@ class OopsieResource {
     }
 
     get() {
-        return new OopsieQuery(this.id);
+        return new OopsieQuery(this.id, this._resource.type);
     }
 
 }

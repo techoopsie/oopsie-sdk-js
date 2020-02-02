@@ -26,8 +26,8 @@ const RestHelper = {
         this.headers['Authorization'] = apiKey;
     },
 
-    get: function(url, cb) {
-        return this.send(this.url + this.appendFirstSlash(url), 'GET', null, cb);
+    get: function(url, cb, { json } = {}) {
+        return this.send(this.url + this.appendFirstSlash(url), 'GET', null, cb, json);
     },
 
     post: function(url, item, cb) {
@@ -49,17 +49,20 @@ const RestHelper = {
         return url;
     },
 
-    send: function(url, method, item, cb) {
+    send: function(url, method, item, cb, json = true) {
         let options = {
-            url: url,
-            method: method,
+            url,
+            method,
             headers: this.headers,
             withCredentials: true,
-            json: true
+            json
         };
 
         if (item) {
             options.body = item;
+        }
+        if (!json) {
+            options.responseType = 'blob'
         }
         request(options, function (error, response, body) {
             if (!cb) {

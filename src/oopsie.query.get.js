@@ -3,10 +3,11 @@ const OopsieQuery = require('./oopsie.query');
 
 class OopsieGetQuery extends OopsieQuery {
 
-    constructor(resourceId) {
+    constructor(resourceId, type) {
         super(resourceId);
         this.view = null;
         this._audit = false;
+        this.type = type;
     }
 
     byView(view) {
@@ -62,13 +63,13 @@ class OopsieGetQuery extends OopsieQuery {
             if (err) {
                 return callback(err);
             }
-            
+
             if(response.metadata) {
                 this.nextPageUrl = response.metadata.nextPageUrl;
                 this.prevPageUrl = response.metadata.prevPageUrl;
             }
             callback(null, response);
-        });
+        }, {json: this.type !== 'BINARY'});
         return this;
     }
 }
