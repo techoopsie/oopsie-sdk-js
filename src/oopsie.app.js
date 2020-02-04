@@ -2,11 +2,11 @@ const OopsieResource = require('./oopsie.resource');
 
 class OopsieApp {
 
-    constructor(appName, app) {
+    constructor(appName, app, restHelper) {
     	this.name = appName;
-    	this.resources = {};
+        this.resources = {};
     	for(var i = 0; i < app.resources.length; i++) {
-    		this.resources[app.resources[i].name] = new OopsieResource(app.resources[i]);
+    		this.resources[app.resources[i].name] = new OopsieResource(app.resources[i], restHelper);
     	}
     }
 

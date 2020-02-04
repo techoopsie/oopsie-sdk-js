@@ -7,26 +7,27 @@ class OopsieService {
         this.siteId = siteId;
         this.customerId = customerId;
         this.prodEndpoint = prodEndpoint;
-        RestHelper.setProdUrl(prodEndpoint);
-        RestHelper.setSiteId(siteId);
-        RestHelper.setCustomerId(customerId);
+        this.restHelper = new RestHelper()
+        this.restHelper.setProdUrl(prodEndpoint);
+        this.restHelper.setSiteId(siteId);
+        this.restHelper.setCustomerId(customerId);
         this.apps = {};
     }
 
     init(callback) {
-        RestHelper.get('/api/v1/init', (err, apps) => {
+        this.restHelper.get('/api/v1/init', (err, apps) => {
             if (err) {
                 return callback(err);
             }
             for(var key in apps) {
-                this.apps[key] = new OopsieApp(key, apps[key]);
+                this.apps[key] = new OopsieApp(key, apps[key], this.restHelper);
             }
             callback(null);
         });
     }
 
     setApiKey(apiKey) {
-        RestHelper.setApiKey(apiKey);
+        this.restHelper.setApiKey(apiKey);
     }
 
     getApp(appName) {
@@ -37,8 +38,8 @@ class OopsieService {
         return this.apps;
     }
 
-    _getRestHelper() {
-        return RestHelper;
+    getRestHelper() {
+        return this.restHelper;
     }
 };
 

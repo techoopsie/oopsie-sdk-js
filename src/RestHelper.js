@@ -1,55 +1,59 @@
 const request = require('request');
 
-const RestHelper = {
+class RestHelper {
 
-    setProdUrl: function(url) {
+    constructor() {
+
+    }
+
+    setProdUrl(url) {
         this.url = url;
-    },
+    }
 
-    getProdUrl: function() {
+    getProdUrl() {
         return this.url;
-    },
+    }
 
-    setCustomerId: function(customerId) {
+    setCustomerId(customerId) {
         this.customerId = customerId;
         this.headers['oopsie-customer-id'] = customerId;
-    },
+    }
 
-    setSiteId: function(siteId) {
+    setSiteId(siteId) {
         this.siteId = siteId;
         this.headers = this.headers || {};
         this.headers['oopsie-site-id'] = siteId;
-    },
+    }
 
-    setApiKey: function(apiKey) {
+    setApiKey(apiKey) {
         this.apiKey = apiKey;
         this.headers['Authorization'] = apiKey;
-    },
+    }
 
-    get: function(url, cb, { json } = {}) {
+    get(url, cb, { json } = {}) {
         return this.send(this.url + this.appendFirstSlash(url), 'GET', null, cb, json);
-    },
+    }
 
-    post: function(url, item, cb) {
+    post(url, item, cb) {
         return this.send(this.url + this.appendFirstSlash(url), 'POST', item, cb);
-    },
+    }
 
-    put: function(url, item, cb) {
+    put(url, item, cb) {
         return this.send(this.url + this.appendFirstSlash(url), 'PUT', item, cb);
-    },
+    }
 
-    delete: function(url, cb) {
+    delete(url, cb) {
         return this.send(this.url + this.appendFirstSlash(url), 'DELETE', null, cb);
-    },
+    }
 
-    appendFirstSlash: function(url) {
+    appendFirstSlash(url) {
         if (url.indexOf('/') !== 0) {
             url = '/' + url;
         }
         return url;
-    },
+    }
 
-    send: function(url, method, item, cb, json = true) {
+    send(url, method, item, cb, json = true) {
         let options = {
             url,
             method,
@@ -62,6 +66,7 @@ const RestHelper = {
             options.body = item;
         }
         if (!json) {
+            console.log('Binary!')
             options.responseType = 'blob'
         }
         request(options, function (error, response, body) {
@@ -80,9 +85,9 @@ const RestHelper = {
             }
             cb(null, body);
         });
-    },
+    }
 
-    mock: function(xhr) {
+    mock(xhr) {
         request.XMLHttpRequest = xhr;
     }
 }

@@ -1,16 +1,15 @@
-const RestHelper = require('./resthelper');
 const OopsieService = require('./oopsie.service');
 
 class OopsieSite {
 
-    constructor(prodEndpoint, siteId, customerId) {
+    constructor(prodEndpoint, siteId, customerId, name = 'OospieSite') {
         if (siteId === undefined || typeof siteId !== 'string' || siteId === '') {
             throw new Error('Oopsie needs an siteId to work.');
         }
         if (customerId === undefined || typeof customerId !== 'string' || customerId === '') {
             throw new Error('Oopsie needs an customerId to work.');
         }
-        this._name = 'OopsieSite';
+        this._name = name;
         this.siteId = siteId;
         this.prodEndpoint = prodEndpoint;
         this.customerId = customerId;
@@ -40,7 +39,7 @@ class OopsieSite {
     }
 
     me(cb) {
-        return RestHelper.get('/api/v1/users/me', cb);
+        return this._restHelper().get('/api/v1/users/me', cb);
     }
 
     isLoggedIn(cb) {
@@ -56,19 +55,23 @@ class OopsieSite {
     }
 
     login(user, cb) {
-        return RestHelper.post('/api/v1/users/login', user, cb);
+        return this._restHelper().post('/api/v1/users/login', user, cb);
     }
 
     register(user, cb) {
-        return RestHelper.post('/api/v1/users/register', user, cb);
+        return this._restHelper().post('/api/v1/users/register', user, cb);
     }
 
     logout(cb) {
-        return RestHelper.post('/api/v1/users/logout', null, cb);
+        return this._restHelper().post('/api/v1/users/logout', null, cb);
     }
 
     refresh(cb) {
-        return RestHelper.post('/api/v1/users/refresh', null, cb);
+        return this._restHelper().post('/api/v1/users/refresh', null, cb);
+    }
+
+    _restHelper() {
+        return this.oopsieService.getRestHelper()
     }
 
 };

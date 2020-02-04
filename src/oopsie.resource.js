@@ -5,7 +5,7 @@ const OopsieSaveQuery = require('./oopsie.query.save');
 
 class OopsieResource {
 
-    constructor(resource) {
+    constructor(resource, restHelper) {
        
         this.resourceName = resource.name;
         this.id = resource.id;
@@ -15,6 +15,7 @@ class OopsieResource {
         this.authEnabled = resource.authEnabled;
          // Make sure you can always get the full init object.
         this._resource = resource;
+        this.restHelper = restHelper;
     }
 
     hasAuthEnabled() {
@@ -22,19 +23,19 @@ class OopsieResource {
     }
 
     create() {
-        return new OopsieCreateQuery(this.id);
+        return new OopsieCreateQuery(this.id, this.restHelper);
     }
 
     save() {
-        return new OopsieSaveQuery(this.id);
+        return new OopsieSaveQuery(this.id, this.restHelper);
     }
 
     delete() {
-        return new OopsieDeleteQuery(this.id);
+        return new OopsieDeleteQuery(this.id, this.restHelper);
     }
 
     get() {
-        return new OopsieQuery(this.id, this._resource.type);
+        return new OopsieQuery(this.id, this._resource.type, this.restHelper);
     }
 
 }

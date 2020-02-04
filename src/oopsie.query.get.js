@@ -1,13 +1,13 @@
-const RestHelper = require('./resthelper');
 const OopsieQuery = require('./oopsie.query');
 
 class OopsieGetQuery extends OopsieQuery {
 
-    constructor(resourceId, type) {
+    constructor(resourceId, type, restHelper) {
         super(resourceId);
         this.view = null;
         this._audit = false;
         this.type = type;
+        this.restHelper = restHelper
     }
 
     byView(view) {
@@ -28,8 +28,8 @@ class OopsieGetQuery extends OopsieQuery {
     }
 
     nextPage(callback) {
-        var url = this.nextPageUrl.substring(RestHelper.getProdUrl().length);
-        RestHelper.get(url, (err, response) => {
+        var url = this.nextPageUrl.substring(this.restHelper.getProdUrl().length);
+        this.restHelper.get(url, (err, response) => {
             if (err) {
                 return callback(err);
             }
@@ -45,8 +45,8 @@ class OopsieGetQuery extends OopsieQuery {
     }
 
     prevPage(callback) {
-        var url = this.prevPageUrl.substring(RestHelper.getProdUrl().length);
-        RestHelper.get(url, (err, response) => {
+        var url = this.prevPageUrl.substring(this.restHelper.getProdUrl().length);
+        this.restHelper.get(url, (err, response) => {
             if (err) {
                 return callback(err);
             }
@@ -58,8 +58,7 @@ class OopsieGetQuery extends OopsieQuery {
     }
 
     execute(callback) {
-
-        RestHelper.get(this._getUrl(), (err, response) => {
+        this.restHelper.get(this._getUrl(), (err, response) => {
             if (err) {
                 return callback(err);
             }

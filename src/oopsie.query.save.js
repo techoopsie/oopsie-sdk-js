@@ -1,10 +1,10 @@
-const RestHelper = require('./resthelper');
 const OopsieQuery = require('./oopsie.query');
 
 class OopsieSaveQuery extends OopsieQuery {
 
-    constructor(resourceId) {
+    constructor(resourceId, restHelper) {
         super(resourceId);
+        this.restHelper = restHelper;
     }
 
     withParams(params) {
@@ -17,7 +17,7 @@ class OopsieSaveQuery extends OopsieQuery {
     }
 
     execute(callback) {
-        RestHelper.put(this.url, this.params, callback);
+        this.restHelper.put(this.url, this.params, callback);
     }
 }
 
