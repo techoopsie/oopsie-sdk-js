@@ -19,6 +19,10 @@ class OopsieApp {
         return this.resources[resourceName];
     }
 
+    getResources() {
+        return this.resources
+    }
+
 }
 
 module.exports = OopsieApp;

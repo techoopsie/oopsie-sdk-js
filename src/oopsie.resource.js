@@ -38,6 +38,10 @@ class OopsieResource {
         return new OopsieQuery(this.id, this._resource.type, this.restHelper);
     }
 
+    getAttributes() {
+        return this.attributes;
+    }
+
 }
 
 module.exports = OopsieResource;
