@@ -58,6 +58,10 @@ class OopsieSite {
         return this._restHelper().post('/api/v1/users/login', user, cb);
     }
 
+    socialLogin(loginInfo, cb) {
+        return this._restHelper().post('/api/v1/users/socialLogin', loginInfo, cb);
+    }
+
     register(user, cb) {
         return this._restHelper().post('/api/v1/users/register', user, cb);
     }

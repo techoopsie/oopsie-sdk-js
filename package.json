@@ -1,6 +1,6 @@
 {
   "name": "@techoopsie/oopsie",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Javascript SDK for Oopsie",
   "homepage": "http://www.oopsie.io/",
   "main": "src/index.js",
