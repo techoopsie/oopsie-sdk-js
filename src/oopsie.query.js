@@ -3,6 +3,12 @@ class OopsieQuery {
     constructor(resourceId) {
         this.url = '/api/v1/resources/' + resourceId;
         this.limitBy = -1;
+        this.auth = null;
+    }
+
+    asAuth(auth) {
+        this.auth = auth
+        return this;
     }
 
     withParams(params) {
@@ -25,6 +31,10 @@ class OopsieQuery {
 
         if (this.limitBy !== -1) {
             url = this._addQueryParam('_limit', this.limitBy, url);
+        }
+
+        if (this.auth) {
+            url = this._addQueryParam('_auth', this.auth, url);
         }
 
         return url;
